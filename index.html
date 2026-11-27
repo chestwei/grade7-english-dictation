@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人教版七年级英语 · 报听写</title>
+<style>
+:root{
+  --primary:#1E40AF; --primary-2:#3B62D6; --primary-soft:#EEF3FF;
+  --accent:#0EA5A4; --accent-soft:#E6F8F7;
+  --warn:#F59E0B; --warn-soft:#FFF6E5;
+  --danger:#DC2626; --danger-soft:#FEF0F0;
+  --ok:#16A34A; --ok-soft:#EAF8EF;
+  --bg:#F5F8FF; --card:#FFFFFF; --text:#1F2937; --muted:#6B7280;
+  --line:#E4EAF5; --shadow:0 2px 10px rgba(30,64,175,.07);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;font-size:16px;line-height:1.6}
+#app{max-width:1080px;margin:0 auto;padding:20px 18px 60px}
+.hidden{display:none !important}
+button{font-family:inherit;font-size:15px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--text);border-radius:10px;padding:9px 15px;transition:.15s}
+button:hover{border-color:var(--primary-2);background:var(--primary-soft)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
+.btn-primary:hover{background:var(--primary-2);border-color:var(--primary-2);color:#fff}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.btn-accent:hover{background:#0b8e8d;border-color:#0b8e8d;color:#fff}
+.btn-lg{padding:14px 30px;font-size:18px;border-radius:12px}
+.btn-sm{padding:5px 10px;font-size:13px;border-radius:8px}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .logo{width:46px;height:46px;border-radius:14px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}
+.brand h1{font-size:22px;margin:0;color:var(--primary)}
+.brand p{margin:0;font-size:13px;color:var(--muted)}
+.hdr-btns{display:flex;gap:8px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.card h2{font-size:17px;margin:0 0 14px;color:var(--primary);display:flex;align-items:center;gap:8px}
+.card h2 .tip{font-size:12px;font-weight:400;color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.seg{display:inline-flex;background:#F1F5FC;border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:9px;padding:8px 16px;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--primary);font-weight:700;box-shadow:0 1px 5px rgba(30,64,175,.12)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.unit{border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;cursor:pointer;background:#fff;display:flex;gap:10px;align-items:flex-start;transition:.15s}
+.unit:hover{border-color:var(--primary-2)}
+.unit.on{border-color:var(--primary);background:var(--primary-soft)}
+.unit .box{width:18px;height:18px;border:2px solid #B9C6E4;border-radius:5px;flex:none;margin-top:3px;display:grid;place-items:center;font-size:12px;color:#fff}
+.unit.on .box{background:var(--primary);border-color:var(--primary)}
+.unit .ut{font-weight:600;font-size:14px}
+.unit .ud{font-size:12px;color:var(--muted)}
+.settings{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13px;color:var(--muted);font-weight:600}
+.field select,.field input[type=number],.field input[type=text]{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:14px;font-family:inherit;background:#fff;color:var(--text);width:100%}
+.switch{display:flex;align-items:center;gap:9px;font-size:14px;cursor:pointer;padding:6px 0}
+.switch input{width:17px;height:17px;accent-color:var(--primary);cursor:pointer}
+.note{font-size:12.5px;color:var(--muted);background:#F8FAFF;border-left:3px solid var(--primary-2);padding:10px 13px;border-radius:0 8px 8px 0;margin-top:14px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.count-badge{background:var(--accent-soft);color:#0b7d7c;padding:6px 13px;border-radius:20px;font-size:14px;font-weight:600}
+/* 发音状态条：常驻可见，任何降级/失败都不静默 */
+.audio-bar{position:sticky;top:0;z-index:30;margin-bottom:14px;padding:10px 15px;border-radius:11px;font-size:13.5px;font-weight:600;border:1px solid var(--line);background:#F8FAFF;color:var(--muted);box-shadow:var(--shadow);cursor:pointer}
+.audio-bar.ok{background:var(--ok-soft);border-color:#BBE7C9;color:#12703A}
+.audio-bar.warn{background:var(--warn-soft);border-color:#F5D58A;color:#8A5B00}
+.audio-bar.err{background:var(--danger-soft);border-color:#F3B9B9;color:#A32020}
+.audio-bar small{font-weight:400;opacity:.8;margin-left:6px}
+/* quiz */
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.quiz-top .title{font-weight:700;color:var(--primary);font-size:17px}
+.progress-txt{font-size:14px;color:var(--muted)}
+.bar{height:8px;background:#EAF0FB;border-radius:8px;overflow:hidden;margin:8px 0 16px}
+.bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0;transition:width .3s}
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px;background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:14px;position:sticky;top:8px;z-index:5;box-shadow:var(--shadow)}
+.ctrl .sep{width:1px;height:24px;background:var(--line);margin:0 3px}
+.countdown{font-size:13px;color:var(--primary);font-weight:600;min-width:78px}
+.qrow{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1.5px solid transparent;border-bottom:1px solid var(--line);border-radius:10px;transition:.15s}
+.qrow:last-child{border-bottom:0}
+.qrow.active{border-color:var(--primary);background:var(--primary-soft)}
+.qrow.done-ok{background:#FBFEFC}
+.qrow.done-bad{background:#FFFAFA}
+.qnum{width:30px;height:30px;flex:none;border-radius:9px;background:#EEF3FF;color:var(--primary);font-weight:700;font-size:13px;display:grid;place-items:center}
+.qrow.active .qnum{background:var(--primary);color:#fff}
+.qprompt{flex:1;min-width:0}
+.qprompt .zh{font-size:17px;font-weight:600}
+.qprompt .tag{font-size:11px;color:var(--muted);margin-left:6px}
+.qinput{width:min(46%,360px);min-width:160px;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;font-size:16px;font-family:inherit;outline:none;background:#fff;color:var(--text)}
+.qinput:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(30,64,175,.1)}
+.qrow.active .qinput{border-color:var(--primary-2)}
+.qplay{flex:none;padding:6px 10px}
+.mark{flex:none;width:26px;font-size:17px;font-weight:700;text-align:center}
+.mark.ok{color:var(--ok)} .mark.bad{color:var(--danger)}
+.answer{color:var(--ok);font-size:13px;font-weight:600}
+/* result */
+.score{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.score .big{font-size:52px;font-weight:800;color:var(--primary);line-height:1}
+.score .big small{font-size:20px;color:var(--muted)}
+.res-row{display:flex;gap:12px;padding:10px 12px;border-bottom:1px solid var(--line);align-items:flex-start;flex-wrap:wrap}
+.res-row .idx{width:26px;color:var(--muted);font-size:13px;flex:none}
+.res-row .body{flex:1;min-width:200px}
+.res-row .en{font-weight:600}
+.res-row .user{font-size:13px;color:var(--danger)}
+.res-row .zh{font-size:13px;color:var(--muted)}
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(20,35,70,.42);display:grid;place-items:center;z-index:50;padding:16px}
+.modal{background:#fff;border-radius:18px;max-width:720px;width:100%;max-height:86vh;overflow:auto;padding:22px;box-shadow:0 18px 50px rgba(20,35,70,.25)}
+.modal h3{margin:0 0 14px;color:var(--primary);font-size:19px}
+.modal .close{float:right;border:0;background:transparent;font-size:22px;color:var(--muted);padding:0 4px}
+.modal textarea{width:100%;min-height:210px;border:1px solid var(--line);border-radius:10px;padding:12px;font-family:Consolas,"Microsoft YaHei",monospace;font-size:14px;line-height:1.7;resize:vertical}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;background:#F8FAFF}
+.tag-pill{display:inline-block;background:var(--primary-soft);color:var(--primary);border-radius:20px;padding:2px 9px;font-size:12px;margin:2px}
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#1F2937;color:#fff;padding:11px 20px;border-radius:24px;font-size:14px;z-index:99;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+#printSheet{display:none}
+@media print{
+  body{background:#fff}
+  #app,.modal-bg,#toast{display:none !important}
+  #printSheet{display:block !important;padding:0;font-size:14px}
+  #printSheet h1{font-size:20px;text-align:center;margin:0 0 6px}
+  #printSheet .meta{text-align:center;color:#444;margin-bottom:14px}
+  #printSheet li{margin-bottom:9px;line-height:1.9}
+  #printSheet .line{display:inline-block;border-bottom:1px solid #999;min-width:230px}
+  #printSheet em{color:#666;font-style:normal;margin-left:8px}
+}
+@media(max-width:640px){
+  .qrow{flex-wrap:wrap}.qinput{width:100%;min-width:0;order:3}.qprompt{order:1}.qplay{order:2}
+  .brand h1{font-size:18px}.score .big{font-size:42px}
+}
+
+
+/* ===== 知识清单专项：沿用 ①②③ 的 seg + row + grid/unit 风格 ===== */
+#extraWrap>.seg{display:flex;width:max-content;max-width:100%;flex-wrap:wrap}
+.eblk{align-items:flex-start}
+.eblk .ebody{flex:1;min-width:0}
+.eblk .ut{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ebadge{background:var(--primary-soft);color:var(--primary);border-radius:20px;padding:1px 8px;font-size:11px;font-weight:600}
+.eblk.part{border-color:var(--primary-2);background:#FBFCFF}
+.eblk.part .box{background:#fff;border-color:var(--primary-2);color:var(--primary)}
+.eblk .ud{margin-top:2px}
+.ebar{margin-top:8px}
+.ebar button{padding:3px 9px;font-size:12px;border-radius:7px}
+.eitems{display:none;grid-template-columns:1fr;gap:1px;margin-top:8px;padding:8px;border-top:1px dashed var(--line);background:#FAFCFF;border-radius:8px;max-height:230px;overflow:auto}
+.eblk.open .eitems{display:grid}
+.eitem{display:flex;align-items:flex-start;gap:7px;padding:3px 5px;border-radius:7px;font-size:12.8px;cursor:pointer;line-height:1.45}
+.eitem:hover{background:var(--primary-soft)}
+.eitem input{width:14px;height:14px;flex:none;margin-top:3px;accent-color:var(--primary);cursor:pointer}
+.eitem>span{min-width:0;word-break:break-word}
+.eitem .en{font-weight:600;color:var(--primary)}
+.eitem .zh{color:var(--muted);font-size:12px;font-weight:400;margin-left:5px}
+.eitem.cx .en{color:#B45309;font-size:12.3px}
+@media(max-width:640px){.eitems{max-height:190px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand">
+      <div class="logo">🎧</div>
+      <div><h1>人教版七年级英语 · 报听写</h1><p>2024 新版教材同步 · 单词 + 词语 + 句子 · 按 Section A / B 分组 · 单文件免安装（在线发音需联网）</p></div>
+    </div>
+    <div class="hdr-btns">
+      <button id="btnWrong" class="btn-sm">📒 错词本</button>
+      <button id="btnHistory" class="btn-sm">📈 历史</button>
+      <button id="btnCustom" class="btn-sm">✏️ 自定义词表</button>
+      <button id="btnHelp" class="btn-sm">❓ 说明</button>
+    </div>
+  </header>
+
+  <div id="audioBar" class="audio-bar" title="点击可测试发音">🔊 发音：自动（在线真人发音优先，断网自动切浏览器合成）<small>点此测试发音</small></div>
+
+  <!-- ============ 首页 ============ -->
+  <section id="viewHome">
+    <div class="card">
+      <h2>① 选择教材 <span class="tip">当前学校用的是 2024 新版（七上 3 个预备篇 + 7 个单元）</span></h2>
+      <div class="seg" id="segBook">
+        <button data-v="7a" class="on">七年级上册（2024）</button>
+        <button data-v="7b">七年级下册（2024）</button>
+        <button data-v="custom">我的词表</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>② 听写内容 <span class="tip">单词 / 词语 / 句子可分开报</span></h2>
+      <div class="seg" id="segType">
+        <button data-v="word" class="on">🔤 只听单词</button>
+        <button data-v="phrase">🔗 只听词语 / 短语</button>
+        <button data-v="sentence">📝 只听句子</button>
+        <button data-v="both">🔤📝 单词 + 句子</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>③ 选择单元与 Section <span class="tip">按课本进度：先选 Section，再勾选单元</span></h2>
+      <div class="seg" id="segSection" style="margin-bottom:14px">
+        <button data-v="all" class="on">整单元（全部内容）</button>
+        <button data-v="A">Section A</button>
+        <button data-v="B">Section B</button>
+      </div>
+      <div class="row" style="margin-bottom:12px">
+        <button id="btnAll" class="btn-sm">全选本册</button>
+        <button id="btnNone" class="btn-sm">清空</button>
+        <span id="selInfo" class="count-badge">已选 0 题</span>
+      </div>
+      <div class="grid" id="unitGrid"></div>
+      <div class="note" style="margin-top:12px">
+        <b>Section 说明：</b>每个单元的单词、词语和重点句都已按课本 <b>Section A / Section B</b> 分开，选 A 或 B 只听写该部分的新词与句型；「整单元」还会额外包含教材的「小学复现词」（约 262 词，课本不单列 Section，属之前学过、本单元再用的词）。分界依据人教版(2024)各单元词表的 Section 分块与逐词标注整理，若与孩子课本进度有出入，可在「自定义词表」里补充或替换。
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>④ 知识清单专项 <span class="tip">《全品作业本》背诵本 P18–24 · 按 Unit + Section 分块 · 五类逐条勾选</span></h2>
+      <div id="extraWrap"></div>
+      <div class="note">
+        <b>用法：</b>和上面一样：先选 Unit、Section、类别，再在卡片上勾选；点卡片里的「逐条挑选」可展开逐条勾。<b>切换筛选不会清空已勾内容，可跨单元跨类别累计</b>；点「▶ 只听写勾选的清单」可只从清单里抽题。<br>
+        <b>五类：</b>小学词汇 / 重点单词 / 重点短语 = 看中文写英文；<b>词形变化</b>按「写出变化后的形式」报（例：屏幕显示 <i>country（复数）</i>，写 <i>countries</i>），条目上显示书中原文；<b>重点句型</b>看中文写整个英文句子，按整句朗读、自动延长朗读间隔。<br>
+        勾选内容会<b>单独并入本次听写</b>，不受 ①②③ 的教材单元、听写类型、Section 选择影响；⑤ 的「本次题量」对教材与清单统一生效（想勾多少报多少，把题量改成「全部题目」）。默认一条都不勾，原有用法完全不变，勾选状态存在本机浏览器。教材原词表与重点句型也仍可单独走上方 ①②③。
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>⑤ 报听写设置</h2>
+      <div class="settings">
+        <div class="field"><label>语音播报</label>
+          <label class="switch"><input type="checkbox" id="setSpeak" checked> 自动念给孩子听</label>
+          <label class="switch"><input type="checkbox" id="setAuto" checked> ▶ 连播（按间隔自动推进）</label>
+          <label class="switch"><input type="checkbox" id="setFocusSpeak"> 光标移到空格即发音</label>
+        </div>
+        <div class="field"><label>发音方式 <span style="font-weight:400">（存本机，下次自动恢复）</span></label>
+          <select id="setSource">
+            <option value="auto">自动：在线词典发音优先，断网切合成语音（推荐）</option>
+            <option value="online">词典发音：联网真人音频，音质最好</option>
+            <option value="local">合成语音：浏览器内置 TTS，可完全离线</option>
+          </select>
+        </div>
+        <div class="field"><label>口音（在线发音时）</label>
+          <select id="setAccent"><option value="uk">英音</option><option value="us">美音</option></select>
+        </div>
+        <div class="field"><label>发音音色（仅合成语音）</label><select id="setVoice"><option value="">自动选择</option></select></div>
+        <div class="field"><label>播报语言</label>
+          <select id="setLang">
+            <option value="en">只念英文（推荐）</option>
+            <option value="both">先英文，再中文</option>
+            <option value="zh">只念中文</option>
+          </select>
+        </div>
+        <div class="field"><label>屏幕显示中文提示</label>
+          <label class="switch"><input type="checkbox" id="setZh" checked> 显示（关掉=纯听写）</label>
+          <label class="switch"><input type="checkbox" id="setShuffle"> 打乱顺序</label>
+        </div>
+        <div class="field"><label>每题间隔（秒）</label>
+          <input type="number" id="setInterval" min="2" max="90" step="1" value="8">
+          <span style="font-size:12px;color:var(--muted)">句子自动按 1.6 倍延长</span>
+        </div>
+        <div class="field"><label>每题重复次数</label>
+          <select id="setRepeat"><option value="1">1 遍</option><option value="2">2 遍</option><option value="3">3 遍</option></select>
+        </div>
+        <div class="field"><label>本次题量（随机抽取）</label>
+          <select id="setLimit">
+            <option value="0">全部题目</option>
+            <option value="10">随机 10 题</option>
+            <option value="15">随机 15 题</option>
+            <option value="20" selected>随机 20 题（推荐）</option>
+            <option value="30">随机 30 题</option>
+            <option value="50">随机 50 题</option>
+          </select>
+        </div>
+        <div class="field"><label>语速</label>
+          <select id="setRate"><option value="0.7">0.7× 慢</option><option value="0.85">0.85×</option><option value="0.95" selected>0.95× 标准</option><option value="1.1">1.1×</option><option value="1.3">1.3× 快</option></select>
+        </div>
+        <div class="field"><label>试听 / 诊断</label>
+          <div class="row"><button id="btnTry" class="btn-sm">🔊 英文单词</button><button id="btnTryS" class="btn-sm">🔊 英文句子</button><button id="btnTryZh" class="btn-sm">🔊 中文</button></div>
+          <span id="tryResult" style="font-size:12px;color:var(--muted)">英文、中文分别试听，会告诉你各自卡在哪一步</span>
+        </div>
+      </div>
+      <div class="note">
+        <b>发音说明：</b><b>单词</b>走有道真人词典发音（音质最好），<b>句子走百度整句 TTS 连贯朗读</b>（一次念完整个句子，不再一个词一个词念）；中文优先系统音色、读不出自动切在线中文。本机没有英语语音包，英文主要靠在线音源（需联网）。中英文各自独立降级、互不拖累，顶部状态条实时显示当前音源，失败会给出原因。<br>
+        默认方式：<b>屏幕显示中文 → 语音念英文 → 孩子写英文</b>，最贴近课堂听写，且不依赖中文语音包。写完点「结束并批改」自动核对（忽略大小写和标点）。<br>
+        <b>一次 15–30 题最合适</b>：已默认「随机 20 题」，点「🎲 换一批」可重新抽；想按课本顺序全听，把「本次题量」改成「全部题目」。先打印听写纸再放语音，两者顺序完全一致。<br>
+        数据说明：词汇表按人教版(2024)七上/七下各单元词表整理（共 1255 词，含短语，已按 Section A / B 标注）；「词语」专项把课本词表里的多词短语单独提出来，并补充按单元整理的重点搭配（补充部分与词表自动去重，不出现重复条目）；重点句依据各单元核心句型、Grammar Focus、课文读背重点句与教辅知识清单扩充整理（共 314 句：Section A 169 句 / Section B 145 句）。个别句子为归纳例句，<b>建议对照课本核对</b>，可在「自定义词表」里随时增删改。
+      </div>
+    </div>
+
+    <div class="card actions">
+      <button id="btnStart" class="btn-primary btn-lg">▶ 开始听写</button>
+      <button id="btnReshuffle" class="btn-lg">🎲 换一批</button>
+      <button id="btnPrint" class="btn-lg">🖨 打印听写纸</button>
+      <label class="switch" style="margin-left:4px"><input type="checkbox" id="printAnswer"> 附答案（家长用）</label>
+      <span id="homeMsg" style="font-size:13px;color:var(--danger)"></span>
+    </div>
+  </section>
+
+  <!-- ============ 听写页 ============ -->
+  <section id="viewQuiz" class="hidden">
+    <div class="quiz-top">
+      <button id="btnBack" class="btn-sm">← 返回首页</button>
+      <div class="title" id="quizTitle">听写中</div>
+      <div class="progress-txt" id="quizProgress">0 / 0</div>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="ctrl">
+      <button id="btnReplay" class="btn-sm">🔊 重读本题</button>
+      <button id="btnPrev" class="btn-sm">⏮ 上一个</button>
+      <button id="btnNext" class="btn-sm">⏭ 下一个</button>
+      <span class="sep"></span>
+      <button id="btnPause" class="btn-sm">⏸ 暂停</button>
+      <span class="countdown" id="countdown">准备中…</span>
+      <span class="sep"></span>
+      <button id="btnToggleZh" class="btn-sm">👁 隐藏中文</button>
+      <button id="btnSubmit" class="btn-accent btn-sm">⏹ 结束并批改</button>
+    </div>
+    <div class="card" id="quizList"></div>
+    <div class="actions" style="justify-content:center">
+      <button id="btnSubmit2" class="btn-accent btn-lg">⏹ 写完了，批改</button>
+    </div>
+  </section>
+
+  <!-- ============ 结果页 ============ -->
+  <section id="viewResult" class="hidden">
+    <div class="card">
+      <div class="score">
+        <div class="big" id="scoreBig">0<small>%</small></div>
+        <div>
+          <div id="scoreInfo" style="font-size:15px"></div>
+          <div style="font-size:13px;color:var(--muted)" id="scoreRange"></div>
+        </div>
+      </div>
+      <div class="actions" style="margin-top:16px">
+        <button id="btnRedoWrong" class="btn-primary">🔁 只听写错题</button>
+        <button id="btnRedoAll" class="btn-sm">重做本套</button>
+        <button id="btnResultHome" class="btn-sm">🏠 返回首页</button>
+        <button id="btnResultPrint" class="btn-sm">🖨 打印结果</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>逐题批改 <span class="tip">绿色为正确答案，红色为孩子所写</span></h2>
+      <div id="resultList"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 弹窗 ============ -->
+<div id="modalBg" class="modal-bg hidden"><div class="modal" id="modalBox"></div></div>
+<div id="toast" class="hidden"></div>
+<div id="printSheet"></div>
+
+<script>
+/* ===== 教材数据（构建时注入） ===== */
+const BOOKS = {"7a":{"name":"七年级上册（2024）","units":[{"unit":"Starter Unit 1","title":"Hello!","words":[["unit","单元","A"],["starter unit","过渡单元","A"],["section","部分；地区","A"],["greet","招呼；问候","A"],["each","每个；各自","A"],["other","另外的人(或物) adj. 另外的；其他的","A"],["each other","互相；彼此","A"],["oh","哦；啊","A"],["everyone","每人；所有人","A"],["start","开始；着手","B"],["conversation","谈话；交谈","B"],["spell","用字母拼；拼写","B"],["bell","铃(声)；钟(声)","B"],["Helen","海伦","B"],["Ella","埃拉","B"],["Emma","埃玛","B"],["Peter","彼得","B"],["Brown","布朗","B"],["PRC","中华人民共和国","B"],["PLA","中国人民解放军","B"],["VR","虚拟现实","B"],["WHO","世界卫生组织","B"],["UN","联合国","B"],["Miller","米勒","B"],["hello","你好；喂",""],["how","怎样；如何",""],["you","你；您；你们",""],["people","人；人们",""],["hi","嗨；喂",""],["good","好的",""],["morning","早晨；上午",""],["and","和；又",""],["Ms","（用于女子的姓氏或姓名前，不指明婚否）女士",""],["class","班级；课",""],["sit","坐",""],["down","下；向下",""],["please","（用于客气地请求或吩咐）请",""],["can","能；会",""],["say","说",""],["to","常用于原形动词之前表示该动词为不定式 朝；至",""],["the","指已提到或易领会到的人或事物",""],["I","我",""],["am","是",""],["thank","感谢；谢谢",""],["now","现在；目前",""],["my","我的",""],["name","名字；名称",""],["is","是",""],["nice","令人愉快的；宜人的",""],["meet","遇见；相逢",""],["so","用来引出评论或问题；所以 这么；那么",""],["what","什么",""],["your","你的；您的；你们的",""],["too","也；又；太",""],["a (an)","（用于单数可数名词前，表示未曾提到的）一（人、事、物）",""],["are","是",""],["goodbye","再见；再会",""],["may","可以；可能",""],["call","把⋯⋯叫作；（给⋯⋯）打电话；呼唤 打电话；大声呼叫",""],["me","（I 的宾格）我",""],["fine","健康的；美好的",""],["great","美妙的；伟大的",""],["that","那；那个",""],["let","允许；让",""],["us","（we 的宾格）我们",""],["go","去；走",""],["bye","再见",""],["it","它",""],["time","时间；次",""],["for","为了；给；对",""]],"phrases":[["starter unit","过渡单元","A"],["each other","互相；彼此","A"],["say hi to sb","跟某人打招呼","A"],["sit down","坐下","A"],["good morning","早上好","A"],["greet each other","互相问候","A"],["my name is ...","我的名字是……","A"],["nice to meet you","很高兴认识你","A"],["go to class","去上课","B"],["spell your name","拼写你的名字","B"],["how are you","你好吗","B"],["thank you","谢谢你","B"],["and you","你呢","B"],["time for class","该上课了","B"]],"sentences":[["Hello!","你好！","A"],["Good morning!","早上好！","A"],["Hi, everyone!","嗨，大家好！","A"],["What's your name?","你叫什么名字？","A"],["My name is Fu Xing.","我叫付兴。","A"],["Nice to meet you.","很高兴认识你。","A"],["Nice to meet you too.","我也很高兴认识你。","A"],["Can you say hi to the class?","你能跟同学们打个招呼吗？","A"],["May I have your name?","能告诉我你的名字吗？","B"],["How do you spell your name?","你的名字怎么拼写？","B"],["How are you?","你好吗？","B"],["I'm fine, thank you. And you?","我很好，谢谢。你呢？","B"],["Let's go to class.","我们去上课吧。","B"],["It's time for class.","该上课了。","B"],["Sit down, please.","请坐。","B"]]},{"unit":"Starter Unit 2","title":"Keep Tidy!","words":[["bottle","瓶子","A"],["eraser","橡皮","A"],["key","钥匙；关键","A"],["thing","东西；事情","A"],["need","需要","A"],["You're welcome.","别客气；不用谢。","A"],["keep","（使）保持；保留","A"],["tidy","整洁的；井井有条的","A"],["in","在⋯⋯里；表示某事完成或发生的方式","A"],["schoolbag","书包","A"],["cap","（无帽边或有帽舌的）帽子；棒球帽","A"],["ruler","尺；直尺","A"],["pencil","铅笔","A"],["brown","棕色（的）；褐色（的）","A"],["black","黑色（的）","A"],["yellow","黄色（的）","A"],["orange","橙红色（的）；橘黄色（的） 橙子；柑橘","A"],["green","绿色（的）","A"],["blue","蓝色（的）","A"],["white","白色（的）","A"],["red","红色（的）","A"],["colour","颜色","A"],["trousers","（pl.）裤子","A"],["they","他（她、它）们","A"],["bicycle","自行车；脚踏车","A"],["shoe","鞋","A"],["where","在哪里；到哪里","B"],["put","放","B"],["bed","床","B"],["desk","书桌","B"],["chair","椅子","B"],["book","书","B"],["box","箱；盒；方框","B"],["sock","短袜","B"],["some","一些；某些 有些；有的","B"],["pair","一双；一对","B"],["of","属于（某人）；关于（某人）","B"],["on","在⋯⋯上","B"],["under","在⋯⋯下","B"],["mum","妈妈","B"],["not","不；没有","B"],["find","找到；发现","B"],["new","新的；刚出现的","B"],["no","不；不要 没有；不是","B"],["here","在这里","B"],["room","房间","B"],["OK","好；行 可以（的）","B"],["sorry","抱歉的；惋惜的","B"],["dad","爸爸","B"],["glasses","（pl.）眼镜","B"],["see","看见","B"],["them","（they 的宾格）他（她、它）们","B"],["wait","等待；等候","B"],["minute","分；分钟","B"],["head","头","B"],["welcome","受欢迎的 欢迎","B"],["her","她的","B"],["nose","鼻子","B"]],"phrases":[["You're welcome.","别客气；不用谢。","A"],["in the schoolbag","在书包里","A"],["what colour","什么颜色","A"],["a blue cap","一顶蓝色的帽子","A"],["an eraser and a key","一块橡皮和一把钥匙","A"],["a red pencil","一支红铅笔","A"],["keep tidy","保持整洁","A"],["on the bed","在床上","B"],["under the desk","在桌子下面","B"],["a pair of socks","一双袜子","B"],["wait a minute","等一会儿","B"],["look for my glasses","找我的眼镜","B"],["here it is","它在这儿","B"]],"sentences":[["What do you have in your schoolbag?","你的书包里有什么？","A"],["I have a bottle.","我有一个瓶子。","A"],["What colour is the cap?","这顶帽子是什么颜色的？","A"],["It's red.","它是红色的。","A"],["What colour are the rulers?","这些尺子是什么颜色的？","A"],["They're white.","它们是白色的。","A"],["Is this your pencil?","这是你的铅笔吗？","A"],["Yes, it is. Thank you.","是的，谢谢你。","A"],["Where is my cap?","我的帽子在哪儿？","B"],["It's on the bed.","它在床上。","B"],["Where are my shoes?","我的鞋在哪儿？","B"],["They're under the desk.","它们在桌子下面。","B"],["I can't find my glasses.","我找不到我的眼镜了。","B"],["Let's keep our classroom tidy!","让我们保持教室整洁！","B"],["You're welcome.","别客气。","B"]]},{"unit":"Starter Unit 3","title":"Welcome!","words":[["fun","乐趣；快乐 adj. 有趣的；使人快乐的","A"],["yard","院子；园圃","A"],["carrot","胡萝卜","A"],["goose","鹅","A"],["count","数数","A"],["another","另一；又一(人或事物)","A"],["else","其他的；别的","A"],["circle","圈出 圆形；圆圈","A"],["look at","看；瞧","A"],["cat","猫","A"],["these","这些","A"],["plant","植物 种植","A"],["baby","动物幼崽；婴儿","A"],["chicken","鸡；鸡肉","A"],["dog","狗","A"],["rabbit","兔子","A"],["tomato","西红柿","A"],["flower","花","A"],["apple","苹果","A"],["tree","树","A"],["this","这；这个","A"],["those","那些","A"],["animal","动物","A"],["duck","鸭子","A"],["potato","土豆","A"],["many","许多","A"],["grandpa","爷爷；外公","B"],["farm","农场","B"],["cow","奶牛","B"],["small","小的","B"],["lake","湖","B"],["house","房子","B"],["horse","马","B"],["sheep","羊；绵羊","B"],["big","大的","B"],["look","看","B"],["uncle","舅父；叔父；伯父；姑父；姨父","B"],["grass","草","B"],["kind","种类 体贴的；亲切的","B"],["he","他","B"],["pig","猪","B"],["there","在那里","B"],["behind","在⋯⋯的后面","B"],["home","家","B"],["beautiful","美丽的","B"],["like","喜欢 例如；像⋯⋯一样","B"],["his","他的","B"],["at","向；朝；在（某处、某时间或时刻）","B"]],"phrases":[["look at","看；瞧","A"],["welcome to my farm","欢迎来到我的农场","A"],["look at the flowers","看这些花","A"],["how many ducks","多少只鸭子","A"],["a baby chicken","一只小鸡","A"],["tomato plants","西红柿植株","A"],["count the animals","数一数动物","A"],["on the farm","在农场里","B"],["behind the house","在房子后面","B"],["in the yard","在院子里","B"],["many animals","许多动物","B"],["apple trees","苹果树","B"],["a small lake","一个小湖","B"]],"sentences":[["Welcome to my farm!","欢迎来到我的农场！","A"],["What's this?","这是什么？","A"],["It's a cat.","它是一只猫。","A"],["What are these?","这些是什么？","A"],["They're tomato plants.","它们是西红柿植株。","A"],["How many ducks are there?","有多少只鸭子？","A"],["There are six ducks.","有六只鸭子。","A"],["What animals do you see?","你看到了什么动物？","A"],["There are many animals on the farm.","农场里有许多动物。","B"],["The lake is behind the house.","湖在房子后面。","B"],["Look at those white sheep.","看那些白色的绵羊。","B"],["My grandpa has a big farm.","我爷爷有一个大农场。","B"],["The carrots are small but fresh.","胡萝卜很小但很新鲜。","B"],["How many apple trees can you see?","你能看到多少棵苹果树？","B"],["I like the beautiful flowers.","我喜欢这些漂亮的花。","B"]]},{"unit":"Unit 1","title":"You and Me","words":[["make friends","交朋友","A"],["get to know","认识；了解","A"],["full","完整的；满的","A"],["full name","全名","A"],["grade","年级；等级","A"],["last name","姓氏","A"],["classmate","同班同学","A"],["class teacher","班主任","A"],["first name","名字","A"],["mistake","错误；失误","A"],["country","国家","A"],["same","相同的","A"],["twin","双胞胎之一 adj. 双胞胎之一的","A"],["both","两个；两个都","A"],["band","乐队","A"],["pot","锅","A"],["a lot","很；非常","A"],["tofu","豆腐","A"],["parrot","鹦鹉","B"],["guitar","吉他","B"],["tennis","网球","B"],["page","页面；（书刊域纸张）页","B"],["even","甚至；连；愈加","B"],["hey","嘿；喂","B"],["play the guitar","弹吉他","B"],["would","model v. 想(用于礼貌地邀请或向某人提供某物)；将会","B"],["would ('d) like to","表示愿意、喜欢","B"],["information","信息；消息","B"],["hobby","业余爱好","B"],["re","（用于回复电子邮件）关于；事由","B"],["Green","格林","A"],["UK","英国","A"],["US","美国","A"],["Smith","史密斯","A"],["Lisa","莉萨","A"],["Tom","汤姆","A"],["hot pot","火锅","A"],["Sally","萨莉","A"],["Wood","伍德","A"],["Sydney","悉尼(澳大利亚城市)","A"],["Australia","澳大利亚","A"],["Mapo tofu","麻婆豆腐","A"],["Beijing roast duck","北京烤鸭","B"],["Singapore","新加坡","B"],["the Great Wall","长城","B"],["Pauline","保利娜","B"],["Lee","李","B"],["Coco","科科","B"],["London","伦敦(英国首都)","B"],["we","我们",""],["make","使成为；制造",""],["friend","朋友",""],["get","去取（或带来）；得到",""],["know","知道",""],["from","从⋯⋯来；从⋯⋯开始",""],["old","老的；旧的",""],["last","最后的；末尾的",""],["year","年",""],["yes","是的；可以",""],["Mr","（用于男子的姓氏或姓名前）先生",""],["our","我们的",""],["English","英语；英格兰人 英语的；英格兰的",""],["teacher","教师",""],["which","哪一个；哪一些",""],["who","谁；什么人",""],["job","工作",""],["student","学生",""],["age","年龄",""],["she","她",""],["favourite","最喜欢的；最爱的",""],["pet","宠物",""],["very","很；非常",""],["cute","可爱的",""],["much","非常；十分 许多；大量；多少",""],["school","学校",""],["China","中国",""],["panda","熊猫",""],["hot","热的；炎热的",""],["also","也；而且",""],["live","居住；生活",""],["with","和⋯⋯在一起；带有；使用",""],["parent","父（母）亲",""],["Chinese","中国的 中国人；汉语",""],["food","食物",""],["lot","大量；许多",""],["about","关于 大约",""],["wall","墙",""],["all","所有（的）；全部（的）",""],["hour","小时",""],["ago","以前",""],["family","家庭",""],["bird","鸟",""],["speak","说（某种语言）；说话",""],["sport","运动",""],["often","时常；常常",""],["play","玩",""],["after","在⋯⋯以后",""],["want","想要",""],["be","是",""],["place","地方；地点",""],["music","音乐",""],["love","喜爱；爱",""],["write","写",""]],"phrases":[["make friends","交朋友","A"],["get to know","认识；了解","A"],["full name","全名","A"],["last name","姓氏","A"],["class teacher","班主任","A"],["first name","名字","A"],["a lot","很；非常","A"],["play the guitar","弹吉他","B"],["would ('d) like to","表示愿意、喜欢","B"],["hot pot","火锅","A"],["Mapo tofu","麻婆豆腐","A"],["Beijing roast duck","北京烤鸭","B"],["the Great Wall","长城","B"],["be from China","来自中国","A"],["in Class 1, Grade 7","在七年级一班","A"],["how old","多大年纪","A"],["your full name","你的全名","A"],["my class teacher","我的班主任","A"],["make friends with sb","和某人交朋友","A"],["write to me","给我写信","B"],["a pet parrot","一只宠物鹦鹉","B"],["get to know each other","互相认识","B"]],"sentences":[["What's your name?","你叫什么名字？","A"],["My name is Peter.","我叫彼得。","A"],["How old are you?","你多大了？","A"],["I'm 12 years old.","我12岁。","A"],["Where are you from?","你来自哪里？","A"],["I'm from China.","我来自中国。","A"],["What class are you in?","你在哪个班？","A"],["I'm in Class 1, Grade 7.","我在七年级一班。","A"],["We're in the same class. Let's be friends!","我们在同一个班。我们做朋友吧！","A"],["What's your full name?","你的全名是什么？","A"],["My last name is Brown.","我姓布朗。","A"],["I like Chinese food a lot.","我非常喜欢中国食物。","B"],["Would you like to be my friend?","你愿意做我的朋友吗？","B"],["What's your hobby?","你的爱好是什么？","B"],["I like playing the guitar.","我喜欢弹吉他。","B"],["My favourite food is hot pot.","我最喜欢的食物是火锅。","B"],["I have a pet parrot.","我有一只宠物鹦鹉。","B"],["We get to know each other.","我们互相认识了。","B"],["Please write to me soon.","请尽快给我回信。","B"]]},{"unit":"Unit 2","title":"We're Family!","words":[["or","或者；也不（用于否定句）",""],["mother","母亲",""],["child","儿童；小孩",""],["sister","姐；妹",""],["brother","兄；弟",""],["cousin","堂兄（弟、姊、妹）；表兄（弟、姊、妹）",""],["aunt","姑（姨、伯、婶、舅）母",""],["grandmother","奶奶；外婆",""],["come","来；来到",""],["ping-pong","乒乓球运动",""],["whose","谁的",""],["well","嗯；好吧 好；令人满意地 健康的",""],["every","每一；每个",""],["day","一天；白天",""],["week","周",""],["fish","钓鱼 鱼；鱼肉",""],["father","父亲；爸爸",""],["piano","钢琴",""],["basketball","篮球；篮球运动",""],["read","读；阅读",""],["garden","做园艺工作；种植花木 园圃；庭园",""],["classroom","教室",""],["their","他（她、它）们的",""],["clean","干净的 使⋯⋯干净；打扫",""],["little","小的；年幼的",""],["ball","球",""],["playground","游乐场；操场",""],["wear","穿；戴",""],["talk","说话；交谈",""],["tall","高的",""],["short","短的；矮的",""],["hair","头发",""],["long","长的",""],["quiet","安静的",""],["girl","女孩",""],["but","但是",""],["any","任何（的）；任一（的）",""],["photo","照片",""],["pink","粉红色(的)",""],["left","左边 向左边",""],["right","右边 向右边 正确的；适当的",""],["always","总是",""],["story","故事",""],["night","夜晚",""],["middle","中间 中间的",""],["think","思考",""],["football","足球；足球运动",""],["happy","快乐的",""],["eye","眼睛",""],["clever","聪明的",""],["next","下一个（的）",""],["him","（he 的宾格）他",""],["help","帮助",""],["mean","意思是；打算","A"],["husband","丈夫","A"],["bat","球棒；球拍","A"],["ping-pong bat","乒乓球拍","A"],["play ping-pong","打乒乓球","A"],["together","在一起；共同","A"],["every day","每天","A"],["fishing rod","钓竿","A"],["spend","花(时间、钱等)","A"],["a lot of / lots of","大量；许多","A"],["really","非常；确实；真正地","A"],["member","成员；会员","A"],["activity","活动","A"],["chess","国际象棋","A"],["Chinese chess","中国象棋","A"],["grandparent","祖父（母）；外祖父（母）","A"],["funny","好笑的；奇怪的","A"],["laugh","笑；发笑 n. 笑声","A"],["different","不同的","A"],["violin","小提琴","A"],["have fun","玩得高兴","A"],["hat","帽子","B"],["handsome","英俊的","B"],["knee","膝；膝盖","B"],["at night","在夜晚","B"],["in the middle","中间；中部","B"],["grandchild","（外）孙子；（外）孙女","B"],["son","儿子","B"],["hike","远足；徒步旅行","B"],["go hiking","远足；徒步旅行","B"],["next to","紧邻；在……近旁","B"],["David","戴维","A"],["Jim","吉姆","A"],["Kate","凯特","A"],["Lily","莉莉","B"],["Ireland","爱尔兰","B"],["Fred","弗雷德","B"],["Sam","萨姆","B"],["Jane","简","B"],["Jack","杰克","B"],["Sarah","萨拉","B"],["Oscar","奥斯卡","B"],["Lucy","露西","B"]],"phrases":[["ping-pong bat","乒乓球拍","A"],["play ping-pong","打乒乓球","A"],["every day","每天","A"],["fishing rod","钓竿","A"],["a lot of / lots of","大量；许多","A"],["Chinese chess","中国象棋","A"],["have fun","玩得高兴","A"],["at night","在夜晚","B"],["in the middle","中间；中部","B"],["go hiking","远足；徒步旅行","B"],["next to","紧邻；在……近旁","B"],["a photo of my family","一张我的全家福","A"],["whose fishing rods","谁的钓鱼竿","A"],["spend time doing sth","花时间做某事","A"],["play Chinese chess","下中国象棋","A"],["how many people","多少人","A"],["a pink hat","一顶粉色的帽子","B"],["long hair","长头发","B"],["next to me","在我旁边","B"]],"sentences":[["Is this your mother?","这是你的妈妈吗？","A"],["No, it isn't.","不，不是。","A"],["Whose fishing rods are those?","那些是谁的钓鱼竿？","A"],["They're my father's.","它们是我爸爸的。","A"],["He spends a lot of time fishing.","他花很多时间钓鱼。","A"],["How many people are there in your family?","你家有几口人？","A"],["There are five.","有五口人。","A"],["Do you play ping-pong together?","你们一起打乒乓球吗？","A"],["My grandpa plays Chinese chess every day.","我爷爷每天下中国象棋。","A"],["Here's a photo of us.","这是我们的一张照片。","B"],["The girl in pink is my sister.","穿粉衣服的女孩是我妹妹。","B"],["My mum is in the middle.","我妈妈在中间。","B"],["My little brother is next to me.","我弟弟在我旁边。","B"],["We have fun at night.","我们晚上玩得很开心。","B"],["My family often goes hiking.","我家经常去远足。","B"],["She has long hair and big eyes.","她有长头发和大眼睛。","B"],["I love my family very much.","我非常爱我的家人。","B"]]},{"unit":"Unit 3","title":"My School","words":[["hall","礼堂；大厅","A"],["dining hall","餐厅","A"],["in front of","在……前面","A"],["building","建筑物；房子","A"],["across","过；穿过","A"],["across from","在对面","A"],["centre","中心；中央","A"],["gym","体育馆，健身房；（尤指学校的）体育活动","A"],["field","场地；田地","A"],["sports field","运动场","A"],["office","办公室","A"],["large","大的；大号的","A"],["special","特别的；特殊的","A"],["smart","智能的；聪明的","A"],["whiteboard","白板；白色书写板","A"],["put up","张贴；搭建","A"],["important","重要的","A"],["notice","通知；注意 v. 注意到；意识到","A"],["locker","有锁存物柜；寄物柜","A"],["drawer","抽屉","A"],["at the back (of)","在(……)后面","A"],["corner","角；墙角；街角","A"],["bookcase","书架；书柜","A"],["screen","屏幕；银幕","A"],["at school","在学校","B"],["different from","与⋯⋯不一样","B"],["modern","现代的；当代的","B"],["do exercises","做体操","B"],["amazing","令人惊奇(惊喜或惊叹)的","B"],["raise","使升高；提高","B"],["flag","旗；旗帜","B"],["most","大多数；最多；最大 adv. 最","B"],["change","改变；变化","B"],["seat","座位","B"],["delicious","美味的；可口的","B"],["How about ...?","⋯⋯怎么样？","B"],["yours","(通常写作Yours，用于书信结尾的签名前) 你的；您的","B"],["send","发送；邮寄","B"],["similar","类似的；相像的","B"],["similar to","类似的；相像的","B"],["sound","听起来；好像 n. 声音；响声","B"],["bye for now","再见","B"],["Flora","弗洛拉","B"],["front","前面",""],["art","艺术；美术",""],["between","在⋯⋯之间",""],["library","图书馆",""],["blackboard","黑板",""],["up","向上",""],["back","后面；背部 后面的；背后的 回来；回原处",""],["clock","时钟；钟",""],["map","地图",""],["computer","电脑",""],["window","窗户",""],["science","科学",""],["picture","照片；图画",""],["famous","著名的",""],["table","桌子",""],["today","在今天 今天",""],["email","电子邮件 （给某人）发电子邮件",""],["answer","回答；答复 答案",""],["question","问题",""],["exercise","运动；锻炼；练习",""],["way","方式；道路",""],["best","最好的 最",""],["because","因为",""],["why","为什么",""],["dear","亲爱的",""],["tell","告诉",""],["interesting","有趣的",""]],"phrases":[["dining hall","餐厅","A"],["in front of","在……前面","A"],["across from","在对面","A"],["sports field","运动场","A"],["put up","张贴；搭建","A"],["at the back (of)","在(……)后面","A"],["at school","在学校","B"],["different from","与⋯⋯不一样","B"],["do exercises","做体操","B"],["How about ...?","⋯⋯怎么样？","B"],["similar to","类似的；相像的","B"],["bye for now","再见","B"],["in front of the building","在建筑物前面","A"],["across from the gym","在体育馆对面","A"],["the teachers' office","教师办公室","A"],["put up a notice","张贴通知","A"],["at the back of the classroom","在教室后面","A"],["between A and B","在A和B之间","A"],["raise the flag","升国旗","B"],["change seats","换座位","B"],["tell me about your school","跟我讲讲你的学校","B"]],"sentences":[["There is a library behind the classroom building.","教学楼后面有一个图书馆。","A"],["There are some trees in front of the sports field.","运动场前面有一些树。","A"],["Where is the teachers' office?","教师办公室在哪里？","A"],["It's on the second floor.","在二楼。","A"],["Is there a whiteboard in your classroom?","你们教室里有白板吗？","A"],["Yes, there is.","是的，有。","A"],["The science lab is between the art room and the music room.","科学实验室在美术室和音乐室之间。","A"],["The dining hall is across from the gym.","餐厅在体育馆对面。","A"],["We put up important notices on the board.","我们把重要通知贴在板上。","A"],["My school is modern and beautiful.","我的学校既现代又漂亮。","B"],["We do exercises on the sports field.","我们在运动场上做操。","B"],["The food in our dining hall is delicious.","我们餐厅的食物很美味。","B"],["How about your new school?","你的新学校怎么样？","B"],["It is similar to mine.","它和我的学校很像。","B"],["We raise the flag every Monday.","我们每周一升国旗。","B"],["I sit next to the window.","我坐在窗边。","B"],["Bye for now!","先写到这儿，再见！","B"],["Tell me about your school, please.","请给我讲讲你的学校。","B"]]},{"unit":"Unit 4","title":"My Favourite Subject","words":[["biology","生物学","A"],["IT","信息技术","A"],["geography","地理(学)","A"],["history","历史；历史课","A"],["boring","乏味的；令人生厌的","A"],["useful","有用的；有益的","A"],["exciting","令人激动的；使人兴奋的","A"],["past","过去；过去的事情 adj. 过去的 prep. 在……之后","A"],["good with","灵巧的；善于应付……的","A"],["number","数字；号码","A"],["help sb with","帮助某人做(某事)","A"],["reason","原因；理由","A"],["listen to","听；倾听","A"],["good at","擅长","A"],["remember","记住；记起","A"],["as","如同；座位 conj. 当……时；由于","A"],["AM","上午","B"],["PM","下午；午后","B"],["French","法语 adj. 法国的；法国人的","B"],["excellent","优秀的；极好的","B"],["instrument","器械；工具","B"],["singer","歌手","B"],["future","将来；未来","B"],["in the future","将来；未来","B"],["term","学期","B"],["work out","计算出；解决","B"],["problem","难题；困难","B"],["in class","课堂上","B"],["magic","魔法；魔力；魔术 adj. 有魔力的；有神奇力量的","B"],["life","生活；生命","B"],["scientist","科学家","B"],["Baker","贝克","B"],["Mike","迈克","B"],["Davis","戴维斯","B"],["Canada","加拿大","B"],["subject","学科；科目",""],["learn","学习；得知",""],["maths","数学",""],["PE","体育",""],["hard","困难的 努力地",""],["difficult","困难的",""],["sure","当然；一定",""],["easy","容易的",""],["use","使用；利用 使用；用途",""],["give","给；送给；供给",""],["idea","想法；主意",""],["listen","听",""],["draw","画画",""],["travel","旅行；游历",""],["walk","行走；步行",""],["afternoon","下午",""],["then","那时；然后；那么",""],["Miss","（对未婚女子的礼貌称呼）小姐；女士",""],["work","工作",""],["sometimes","有时",""],["feel","感觉；觉得",""],["busy","忙碌的；无暇的",""],["study","学习；研究",""],["song","歌曲",""],["out","（从⋯⋯里）出来；出去",""]],"phrases":[["good with","灵巧的；善于应付……的","A"],["help sb with","帮助某人做(某事)","A"],["listen to","听；倾听","A"],["good at","擅长","A"],["in the future","将来；未来","B"],["work out","计算出；解决","B"],["in class","课堂上","B"],["be good at","擅长","A"],["be good with numbers","善于应付数字","A"],["help sb with sth","帮助某人做某事","A"],["listen to the teacher","听老师讲","A"],["my favourite subject","我最喜欢的科目","A"],["in the past","在过去","A"],["work out a problem","解出一道题","B"],["learn French","学法语","B"],["a science teacher","一位科学老师","B"],["be useful to us","对我们有用","B"]],"sentences":[["What's your favourite subject?","你最喜欢的科目是什么？","A"],["My favourite subject is English.","我最喜欢的科目是英语。","A"],["Why do you like it?","你为什么喜欢它？","A"],["Because it's interesting.","因为它很有趣。","A"],["I like Chinese because it's fun.","我喜欢语文，因为它有趣。","A"],["Biology is difficult but important.","生物很难但很重要。","A"],["I'm good with numbers.","我擅长数字。","A"],["Can you help me with this subject?","你能帮我学这门科目吗？","A"],["History is useful and exciting.","历史既有用又令人兴奋。","A"],["What classes do you have on Monday?","你们周一有什么课？","B"],["I have maths, IT and geography.","我有数学、信息技术和地理。","B"],["I want to be a scientist in the future.","我将来想当科学家。","B"],["My teacher can work out difficult problems.","我的老师能解出难题。","B"],["We learn French in class.","我们在课堂上学习法语。","B"],["Music is my favourite because it's relaxing.","音乐是我的最爱，因为它让人放松。","B"],["I work hard at all my subjects.","我所有科目都很用功。","B"],["The singer is excellent.","这位歌手很出色。","B"]]},{"unit":"Unit 5","title":"Fun Clubs","words":[["club","俱乐部；社团","A"],["join","参加；加入","A"],["choose","选择；挑选","A"],["drama","戏剧；戏剧表演","A"],["play Chinese chess","下中国象棋","A"],["feeling","感觉；情感","A"],["news","消息；新闻","A"],["musical","音乐的；有音乐天赋的","A"],["musical instrument","乐器","A"],["exactly","正是如此；准确地","A"],["drum","鼓","A"],["ability","能力；才能","A"],["paint","用颜料画；在……上刷油漆 n. 油漆；涂料","A"],["climb","攀登；爬","A"],["more","更多(的)","A"],["act","扮演；行动 n. (戏剧等)一幕；行动","B"],["act out","表演","B"],["at home","在家里","B"],["interested","感兴趣的","B"],["interested in","对……感兴趣","B"],["nature","自然界；大自然","B"],["beef","牛肉","B"],["soon","不久；很快","B"],["than","(用以引出比较的第二部分) 比","B"],["more than","多于","B"],["mind","头脑；心思","B"],["fall","进入；掉落；跌倒 n. (美式)秋天","B"],["fall in love with","爱上……","B"],["take photos","拍照","B"],["collect","收集；采集","B"],["insect","昆虫","B"],["discover","发现；发觉","B"],["wildlife","野生动物；野生生物","B"],["Linda","琳达","A"],["Alice","爱丽丝","B"],["Bill","比尔","B"],["Jenny","珍妮","B"],["sing","唱歌",""],["swim","游泳",""],["run","跑；跑步",""],["fast","快地 快的",""],["dance","跳舞",""],["fly","飞",""],["watch","注视；观看 表；手表",""],["cake","蛋糕",""],["cook","做饭 厨师",""],["noodle","（usually pl.）面条",""],["open","打开 开放的；敞开的",""],["take","拍照；拿；取；买下",""],["visit","参观；拜访",""],["park","公园",""],["when","什么时候",""],["share","分享；合用；分担",""]],"phrases":[["play Chinese chess","下中国象棋","A"],["musical instrument","乐器","A"],["act out","表演","B"],["at home","在家里","B"],["interested in","对……感兴趣","B"],["more than","多于","B"],["fall in love with","爱上……","B"],["take photos","拍照","B"],["join the music club","加入音乐社","A"],["play the drums","打鼓","A"],["a musical instrument","一件乐器","A"],["choose a club","选一个社团","A"],["be able to do sth","能够做某事","A"],["act out a story","表演一个故事","B"],["be interested in nature","对大自然感兴趣","B"],["take photos of insects","给昆虫拍照","B"],["more than twenty","二十多","B"],["collect leaves","收集树叶","B"]],"sentences":[["What club do you want to join?","你想加入什么社团？","A"],["I want to join the music club.","我想加入音乐社。","A"],["Can you play Chinese chess?","你会下中国象棋吗？","A"],["Yes, I can.","是的，我会。","A"],["I'd love to, but I can't play any musical instruments.","我很乐意，但我不会演奏任何乐器。","A"],["She is good at singing.","她擅长唱歌。","A"],["He can play the drums and the piano, too.","他会打鼓，也会弹钢琴。","A"],["Can you paint or climb?","你会画画或攀爬吗？","A"],["Choose a club and join us!","选一个社团加入我们吧！","A"],["I'm interested in nature.","我对大自然感兴趣。","B"],["We act out stories at home.","我们在家表演故事。","B"],["Come and discover wildlife with us.","来和我们一起探索野生动物吧。","B"],["We take photos of insects in the park.","我们在公园给昆虫拍照。","B"],["You can collect leaves and flowers.","你可以收集树叶和花。","B"],["More than twenty students are in the club.","二十多名学生在这个社团里。","B"],["I fell in love with the drama club.","我爱上了戏剧社。","B"],["We meet every Friday afternoon.","我们每周五下午活动。","B"]]},{"unit":"Unit 6","title":"A Day in the Life","words":[["make use of","使用……；利用……","A"],["quarter","一刻钟；四等份之一","A"],["shower","淋浴；淋浴器 v. 洗淋浴","A"],["take a shower","淋浴","A"],["get dressed","穿衣服","A"],["brush","(用刷子)刷；n. 刷子；画笔","A"],["tooth","牙齿","A"],["duty","值班；职责","A"],["on duty","值班","A"],["usually","通常地；一般地","A"],["get up","起床；站起","A"],["reporter","记者","A"],["around","大约；环绕；到处","A"],["homework","家庭作业","A"],["go to bed","上床睡觉","A"],["saying","谚语；格言","A"],["rise","起床；升起；增长 n. 增加；增强","A"],["stay","停留；待","A"],["routine","常规","A"],["restaurant","餐馆；餐厅","A"],["housework","家务劳动","A"],["while","一段时间；一会儿 conj. 在……期间；当……的时候","A"],["weekend","周末","A"],["at weekends","在周末","A"],["daily","每日的；日常的","B"],["daily routine","日常生活","B"],["only","只；仅","B"],["break","休息；间断 v. (使)破碎；损坏","B"],["Finnish","芬兰语 adj. 芬兰的；芬兰人的；芬兰语的","B"],["finish","结束；完成","B"],["hockey","曲棍球","B"],["ice hockey","冰球运动；冰上曲棍球","B"],["already","已经；早已","B"],["dark","昏暗的；深色的","B"],["outside","在外面 adj. 外面的 prep. 在……外面","B"],["part","部分","B"],["everyday","每天的；日常的","B"],["prepare","把……准备好；准备","B"],["prepare sth for","为⋯⋯把某物准备好","B"],["Timo","蒂莫","B"],["Halla","哈拉","B"],["Helsinki","赫尔辛基(芬兰首都)","B"],["Finland","芬兰","B"],["home economics","家事经济","B"],["o'clock","（表示整点）⋯⋯点钟",""],["half","一半；半 半数",""],["dress","穿衣服 连衣裙",""],["breakfast","早餐",""],["before","在⋯⋯以前 以前",""],["begin","开始",""],["dinner","正餐；主餐",""],["early","早的；早期的 提前；在早期",""],["ask","询问；请求",""],["lunch","午餐",""],["film","电影",""],["lesson","课；一节课",""],["ice","冰；冰块",""]],"phrases":[["make use of","使用……；利用……","A"],["take a shower","淋浴","A"],["get dressed","穿衣服","A"],["on duty","值班","A"],["get up","起床；站起","A"],["go to bed","上床睡觉","A"],["at weekends","在周末","A"],["daily routine","日常生活","B"],["ice hockey","冰球运动；冰上曲棍球","B"],["prepare sth for","为⋯⋯把某物准备好","B"],["home economics","家事经济","B"],["get up early","早起","A"],["do my homework","做作业","A"],["at half past six","在六点半","A"],["make use of time","利用时间","B"],["have a break","休息一下","B"],["before dinner","晚饭前","B"]],"sentences":[["When do you usually get up?","你通常几点起床？","A"],["I usually get up at 6:30 a.m.","我通常早上六点半起床。","A"],["When does Tom usually go to bed?","汤姆通常几点睡觉？","A"],["He usually goes to bed at 9:30 p.m.","他通常晚上九点半睡觉。","A"],["When do they go to the music club?","他们什么时候去音乐社？","A"],["They go on Monday afternoons.","他们周一下午去。","A"],["What do you do after dinner?","你晚饭后做什么？","A"],["Sometimes I read books or do my homework.","有时我看书或写作业。","A"],["I take a shower and get dressed.","我洗淋浴然后穿衣服。","A"],["What time is it now?","现在几点了？","A"],["Each lesson is 45 minutes long.","每节课45分钟。","B"],["My daily routine is busy but interesting.","我的日常生活忙碌但有趣。","B"],["I prepare my schoolbag for the next day.","我为第二天准备书包。","B"],["There is a break between two lessons.","两节课之间有休息。","B"],["I usually have lunch at twelve o'clock.","我通常十二点吃午饭。","B"],["He finishes his homework before dinner.","他晚饭前完成作业。","B"],["At weekends I help with housework.","周末我帮忙做家务。","B"],["Early to bed and early to rise.","早睡早起。","B"]]},{"unit":"Unit 7","title":"Happy Birthday!","words":[["celebrate","庆祝；庆贺","A"],["surprise","惊奇；惊讶 v. 使感到意外","A"],["something","某事；某物","A"],["sale","出售；销售","A"],["kilo","千克；公斤","A"],["yogurt","酸奶","A"],["total","总数；合计 adj. 总的；全体的","A"],["price","价格","A"],["balloon","气球","A"],["chocolate","巧克力","A"],["pizza","比萨饼","A"],["list","列表；列清单 n. 名单；清单","A"],["own","自己的；本人的","A"],["example","例子；范例","A"],["for example","例如","A"],["language","语言","A"],["international","国际的","A"],["mark","做记号；纪念；打分 n. 记号","A"],["national","国家的；民族的","A"],["found","创建；创立","A"],["meaningful","重要的；重大的","B"],["make a wish","许愿","B"],["celebration","庆典；庆祝（活动）","B"],["post","帖子；邮政 v. 邮寄；发布","B"],["contact","联系；接触 联系；联络","B"],["symbol","象征；符号","B"],["take a photo","拍照","B"],["village","村庄；村镇","B"],["grow","成长；长大；增长","B"],["blow","吹；刮","B"],["blow out","吹灭","B"],["enjoy","享受……的乐趣；喜欢","B"],["height","身高；高度","B"],["later","以后(的)；后来(的)","B"],["next time","下次","B"],["whom","谁；什么人","B"],["William Shakespeare","威廉·莎士比亚","A"],["Florence Nightingale","弗洛伦斯·南丁格尔","A"],["National Day","国庆节","A"],["CPC Founding Day","中国共产党建党纪念日","A"],["PLA Day","中国人民解放军建军节","A"],["Judy","朱迪","B"],["Clark","克拉克","B"],["birthday","生日",""],["month","月份",""],["gift","礼物",""],["party","聚会",""],["buy","买",""],["shop","商店 逛商店；在商店购物",""],["woman","女人",""],["candle","蜡烛",""],["will","将要；会",""],["egg","蛋",""],["juice","果汁",""],["milk","牛奶",""],["candy","糖果",""],["drink","饮品 喝",""],["card","厚纸片；卡片",""],["doll","玩偶；玩具娃娃",""],["Mrs","（对已婚妇女的礼貌称呼）夫人；太太",""],["eat","吃",""],["wish","希望；祝愿 愿望",""],["nurse","护士",""],["hear","听到",""],["door","门",""]],"phrases":[["for example","例如","A"],["make a wish","许愿","B"],["take a photo","拍照","B"],["blow out","吹灭","B"],["next time","下次","B"],["William Shakespeare","威廉·莎士比亚","A"],["Florence Nightingale","弗洛伦斯·南丁格尔","A"],["National Day","国庆节","A"],["CPC Founding Day","中国共产党建党纪念日","A"],["PLA Day","中国人民解放军建军节","A"],["happy birthday","生日快乐","A"],["how much","多少钱","A"],["a kilo of oranges","一公斤橘子","A"],["make a shopping list","列购物清单","A"],["on 2nd August","在八月二日","A"],["blow out the candles","吹灭蜡烛","B"],["grow up","长大","B"],["be meaningful to me","对我很有意义","B"]],"sentences":[["When is your birthday?","你的生日是什么时候？","A"],["It's on 2nd August.","在8月2日。","A"],["How old are you?","你几岁了？","A"],["I'm 12.","我12岁。","A"],["What do you want to do on her birthday?","她生日那天你想做什么？","A"],["I want to sing a song for her.","我想为她唱首歌。","A"],["How much are those oranges?","那些橘子多少钱？","A"],["Six yuan a kilo.","一公斤六元。","A"],["How many kilos do you want?","你想要几公斤？","A"],["I want five kilos.","我想要五公斤。","A"],["Let's make a shopping list.","我们列个购物清单吧。","A"],["We celebrate National Day on 1st October.","我们在十月一日庆祝国庆节。","B"],["Make a wish and blow out the candles.","许个愿，然后吹灭蜡烛。","B"],["This birthday is meaningful to me.","这个生日对我很有意义。","B"],["My height is 1.6 metres now.","我现在身高1.6米。","B"],["We take a photo to mark the day.","我们拍照纪念这一天。","B"],["Happy birthday to you!","祝你生日快乐！","B"],["Next time we will have a bigger party.","下次我们会办一个更大的聚会。","B"]]}]},"7b":{"name":"七年级下册（2024）","units":[{"unit":"Unit 1","title":"Animal Friends","words":[["fox","狐狸","A"],["giraffe","长颈鹿","A"],["eagle","鹰；雕","A"],["wolf","(pl. wolves /wʊlvz/) 狼","A"],["penguin","企鹅","A"],["care","关心；在乎","A"],["take care of","照顾；处理","A"],["sandwich","三明治","A"],["snake","蛇","A"],["scary","吓人的；恐怖的","A"],["neck","脖子","A"],["guess","猜测；估计","A"],["shark","鲨鱼","A"],["whale","鲸","A"],["huge","巨大的；极多的","A"],["dangerous","危险的；有危险的","A"],["save","救；储蓄；保存","B"],["luck","幸运；运气","B"],["Thai","泰国的；泰国人的","B"],["trunk","象鼻","B"],["pick","拣；摘","B"],["pick up","拿起；举起","B"],["carry","拿；提","B"],["playful","爱嬉戏的；爱玩的","B"],["swimmer","游泳者","B"],["one another","互相","B"],["look after","照顾","B"],["culture","文化；文明","B"],["however","然而；不过","B"],["danger","危险","B"],["in danger","处于危险之中","B"],["forest","森林","B"],["cut down","砍伐；减少","B"],["too many","太多","B"],["kill","杀死；弄死","B"],["made of","由……制成的","B"],["ivory","象牙","B"],["friendly","友好的","B"],["quite","相当；完全","B"],["quite a","相当；非常","B"],["not ... at all","一点也不；完全不","B"],["fur","(动物的)毛皮；软毛","B"],["blind","瞎的；失明的","B"],["hearing","听力；听觉","B"],["Antarctica","南极洲","B"],["Africa","非洲","B"],["Mary","玛莉","B"],["Thailand","泰国","B"],["lion","狮子","A"],["tiger","老虎","A"],["monkey","猴子","A"],["should","应该；应当","A"],["cool","妙极的；酷的","A"],["lovely","优美的；迷人的","A"],["cold","寒冷的","A"],["stand","站立","A"],["close","紧挨着；靠近 亲密的；接近的","A"],["warm","温暖的；暖和的","A"],["sea","海；海洋","A"],["look","看；瞧； 相貌；容貌","A"],["mouse","老鼠","A"],["bear","熊 承受；容忍","A"],["tail","尾巴","A"],["elephant","象","B"],["strong","强壮的；强健的","B"],["ear","耳朵","B"],["heavy","重的；沉的","B"],["water","水","B"],["cut","砍；切","B"],["safe","安全的","B"]],"phrases":[["take care of","照顾；处理","A"],["pick up","拿起；举起","B"],["one another","互相","B"],["look after","照顾","B"],["in danger","处于危险之中","B"],["cut down","砍伐；减少","B"],["too many","太多","B"],["made of","由……制成的","B"],["quite a","相当；非常","B"],["not ... at all","一点也不；完全不","B"],["be from South Africa","来自南非","A"],["look like","看起来像","A"],["why not","为什么不","A"],["a baby penguin","一只小企鹅","A"],["in the sea","在海里","A"],["very cute and friendly","非常可爱友好","A"],["cut down trees","砍伐树木","B"],["made of ivory","由象牙制成","B"],["look after animals","照顾动物","B"],["pick up things","捡起东西","B"]],"sentences":[["What's your favourite animal?","你最喜欢的动物是什么？","A"],["Why do you like penguins so much?","你为什么这么喜欢企鹅？","A"],["Because they're very cute and friendly.","因为它们非常可爱友好。","A"],["Where are they from?","它们来自哪里？","A"],["They are from South Africa.","它们来自南非。","A"],["What does it look like?","它长什么样？","A"],["Let's go and see the wolves.","我们去看狼吧。","A"],["They can't fly, but they can swim fast.","它们不会飞，但游得很快。","A"],["Why don't you like snakes?","你为什么不喜欢蛇？","A"],["Don't give them your sandwich!","别把你的三明治给它们！","A"],["We must save the animals in danger.","我们必须拯救濒危动物。","B"],["Don't cut down too many trees.","不要砍伐太多树木。","B"],["The elephant can pick up things with its trunk.","大象能用鼻子捡起东西。","B"],["People kill elephants for their ivory.","人们为了象牙猎杀大象。","B"],["The blind man has good hearing.","这位盲人的听力很好。","B"],["Animals are an important part of our culture.","动物是我们文化的重要部分。","B"],["We should look after our animal friends.","我们应该照顾我们的动物朋友。","B"],["The whale is huge but not scary.","鲸很大但不可怕。","B"]]},{"unit":"Unit 2","title":"No Rules, No Order","words":[["rule","规则；规章","A"],["order","点菜；命令","A"],["follow","遵循；跟随","A"],["late for","迟到","A"],["arrive","到达","A"],["on time","准时","A"],["hallway","走廊","A"],["uniform","校服；制服","A"],["litter","乱扔；n. 垃圾","A"],["polite","有礼貌的","A"],["treat","对待；招待；治疗；n. 款待","A"],["respect","尊敬","A"],["if","如果","A"],["jacket","夹克衫；短上衣","A"],["have to","不得不","A"],["everything","每件事；一切","A"],["lend","借给；借出","A"],["sweet","糖果；adj. 甜的","A"],["snack","点心；小吃","A"],["of course","当然","A"],["mobile","可移动的","A"],["mobile phone","手机","A"],["turn off","关闭（水、电或煤气）","A"],["queue","队","A"],["jump the queue","插队","A"],["feed","喂养；饲养","A"],["leave","离开；留下","A"],["absent","缺席的；不在的","A"],["absent from","缺席；不在","A"],["shh","嘘（让别人安静下来）","A"],["quietly","轻声地；安静地","A"],["belt","安全带；腰带；皮带","A"],["noise","声音；噪声","A"],["unhappy","不快乐的","B"],["Dr","博士；医生","B"],["make sb's/the bed","整理床铺；铺床","B"],["either","也（用于否定词组后）","B"],["practise","训练；练习","B"],["hang","悬挂","B"],["hang out","闲逛；常去某处","B"],["weekday","工作日（星期一至星期五的任何一天）","B"],["awful","糟糕的；讨厌的","B"],["become","变成；成为","B"],["better","较好的；adv. 较好地","B"],["person","人","B"],["focus","集中（注意力、精力等）；聚焦","B"],["focus on","集中（注意力、精力等），专注于","B"],["build","创建；建立","B"],["spirit","精神；情绪","B"],["think about","思考，考虑","B"],["relax","放松；休息","B"],["advice","建议；意见","B"],["understand","理解；领会","B"],["untidy","不整洁的","B"],["Mary","玛丽","B"],["Tony","托尼","B"],["Anne","安妮","B"],["Eric","埃里克","B"],["late","迟到的；晚的","A"],["phone","电话","A"],["hand","手","A"],["must","必须","A"],["pen","钢笔","A"],["fruit","水果","A"],["bring","带来","A"],["turn","转动","A"],["off","离开；（切）断；（停）止","A"],["jump","跳","A"],["bad","不好的: 坏的","A"],["car","小汽车","A"],["cinema","电影院","A"],["hospital","医院","A"],["hurry","匆忙","B"],["show","表明；展示 演出","B"],["world","世界","B"],["clothes","衣服","B"],["TV","电视","B"],["never","从不","B"]],"phrases":[["late for","迟到","A"],["on time","准时","A"],["have to","不得不","A"],["of course","当然","A"],["mobile phone","手机","A"],["turn off","关闭（水、电或煤气）","A"],["jump the queue","插队","A"],["absent from","缺席；不在","A"],["make sb's/the bed","整理床铺；铺床","B"],["hang out","闲逛；常去某处","B"],["focus on","集中（注意力、精力等），专注于","B"],["think about","思考，考虑","B"],["follow the rules","遵守规则","A"],["be late for class","上课迟到","A"],["wear school uniforms","穿校服","A"],["turn off the phone","关掉手机","A"],["make the bed","整理床铺","B"],["be absent from","缺席……","B"],["on weekdays","在工作日","B"],["give me advice","给我建议","B"]],"sentences":[["No rules, no order.","没有规矩，不成方圆。","A"],["We must follow the school rules.","我们必须遵守校规。","A"],["Don't arrive late for class.","上课不要迟到。","A"],["We have to wear uniforms at school.","在学校我们必须穿校服。","A"],["Can we listen to music in class?","我们能在课堂上听音乐吗？","A"],["No, we can't. We have to be quiet.","不，不能。我们必须保持安静。","A"],["What are the rules in your school?","你们学校有什么规定？","A"],["We mustn't run in the hallways.","我们不能在走廊里跑。","A"],["Please turn off your mobile phone.","请关掉手机。","A"],["Don't jump the queue.","不要插队。","A"],["I have to make my bed every morning.","我每天早上必须整理床铺。","B"],["I can't hang out on weekdays.","工作日我不能出去玩。","B"],["My parents give me some advice.","我父母给了我一些建议。","B"],["I understand the rules now.","我现在理解这些规矩了。","B"],["We should focus on our studies.","我们应该专注于学习。","B"],["It's awful to be absent from class.","缺课是很糟糕的。","B"],["Rules help us become better people.","规矩帮助我们成为更好的人。","B"],["Try to relax after a busy day.","忙碌一天后尽量放松一下。","B"]]},{"unit":"Unit 3","title":"Keep Fit","words":[["fit","健康的；健壮的；v. 适合","A"],["baseball","棒球（运动）","A"],["glove","（手指分开的）手套","A"],["mat","（运动用的）垫子","A"],["rope","绳子；粗绳","A"],["jump rope","跳绳（运动）","A"],["racket","（网球、羽毛球等的）球拍","A"],["hardly","几乎不；几乎没有","A"],["ever","在任何时候；从来；曾经","A"],["hardly ever","几乎从不","A"],["once","一次；曾经；conj. 一旦","A"],["twice","两次；两倍","A"],["mine","我的（所有物）","A"],["hers","她的（所有物）","A"],["maybe","也许；大概","A"],["well-used","使用得多的","A"],["practice","练习；实践","A"],["perfect","完美的；极好的","A"],["seldom","很少；不常","A"],["badminton","羽毛球运动","A"],["double","双打（doubles）；两倍adj. 成双的；两倍的","A"],["sometime","在某时候","A"],["volleyball","排球（运动）","A"],["theirs","他们的，她们的，它们的（所有物）","A"],["jog","慢跑","A"],["few","（表示否定的）很少的；几乎没有的","A"],["a few","少数；几个","A"],["excuse","原谅；宽恕","A"],["excuse me","劳驾；请原谅","A"],["over there","在那边","A"],["just","只是；正好","A"],["T-shirt","T 恤衫","A"],["belong","应在（某处）；属于（某人）","A"],["belong to","属于（某人）","A"],["working","工作的","A"],["working day","工作日","A"],["full of","充满","A"],["energy","精力；能量","A"],["group","组；群","A"],["skateboard","滑板","B"],["encourage","鼓励；激励","B"],["trick","技巧；戏法","B"],["succeed","成功；达到目标","B"],["skateboarding","滑板运动","B"],["goal","目标；目的","B"],["sit-up","仰卧起坐","B"],["work out","锻炼","B"],["app","应用程序（= application）","B"],["progress","进步；进展","B"],["match","比赛；竞赛","B"],["team","队；组","B"],["ours","我们的（所有物）","B"],["lose","输掉；丢失","B"],["teenager","青少年（13岁至19岁之间）","B"],["Steve","史蒂夫","B"],["over","在另一边 在⋯⋯上方；超过","A"],["near","接近；在⋯⋯附近 在近处 近的","A"],["air","空气","A"],["evening","晚上","A"],["tired","累的；疲倦的","A"],["win","获胜；赢","B"],["healthy","健康的","B"],["body","身体","B"],["try","尝试；努力","B"]],"phrases":[["jump rope","跳绳（运动）","A"],["hardly ever","几乎从不","A"],["a few","少数；几个","A"],["excuse me","劳驾；请原谅","A"],["over there","在那边","A"],["belong to","属于（某人）","A"],["working day","工作日","A"],["full of","充满","A"],["work out","锻炼","B"],["once a week","一周一次","A"],["go jogging","去慢跑","A"],["be good for my health","对我的健康有好处","B"],["be bad for your teeth","对你的牙齿不好","B"],["junk food","垃圾食品","B"],["go to bed early","早点睡觉","B"],["make progress","取得进步","B"],["full of energy","充满活力","B"]],"sentences":[["How do you keep fit?","你如何保持健康？","A"],["I keep fit by doing exercise every day.","我通过每天锻炼保持健康。","A"],["How often do you exercise?","你多久锻炼一次？","A"],["I hardly ever play badminton.","我几乎从不打羽毛球。","A"],["Whose baseball glove is this?","这是谁的棒球手套？","A"],["It's mine.","是我的。","A"],["The jump rope is hers.","这根跳绳是她的。","A"],["I go jogging once or twice a week.","我一周慢跑一两次。","A"],["Excuse me, is this racket yours?","打扰一下，这个球拍是你的吗？","A"],["It's good for my health.","这对我的健康有好处。","B"],["We should eat more fruit and vegetables.","我们应该多吃水果和蔬菜。","B"],["Don't eat too much junk food.","不要吃太多垃圾食品。","B"],["It's bad for your teeth.","这对你的牙齿不好。","B"],["We must go to bed early.","我们必须早点睡觉。","B"],["My skateboarding skills are making progress.","我的滑板技术正在进步。","B"],["Our team never loses hope.","我们队从不失去希望。","B"],["A healthy body needs enough energy.","健康的身体需要足够的能量。","B"],["The teacher encourages us to try.","老师鼓励我们尝试。","B"]]},{"unit":"Unit 4","title":"Eat Well","words":[["watermelon","西瓜","A"],["cabbage","卷心菜","A"],["mutton","羊肉","A"],["cookie","曲奇饼","A"],["onion","洋葱；葱头","A"],["dumpling","饺子","A"],["coffee","咖啡","A"],["bean","豆","A"],["chip","炸薯条","A"],["fish and chips","炸鱼薯条","A"],["salad","沙拉；色拉","A"],["porridge","粥；麦片粥","A"],["waiter","（男）服务员","A"],["What about ...?","⋯⋯怎么样？","A"],["taste","有……味道；尝 n. 味道","A"],["anything","某事物；任何事物","A"],["dish","一道菜；盘子","A"],["choice","选择","A"],["meal","一餐所吃的食物；一餐","A"],["pork","猪肉","A"],["strawberry","草莓","A"],["menu","菜单","A"],["customer","顾客","A"],["serve","提供；服务","A"],["waitress","女服务员","A"],["Sir","先生","A"],["go with","搭配；相配","A"],["instead","反而；代替","A"],["pear","梨","A"],["too much","太多","A"],["sugar","糖","A"],["improve","改进；改善","B"],["habit","习惯","B"],["fast food","快餐","B"],["salt","盐","B"],["fat","脂肪；adj. 肥胖的","B"],["put on","增加；穿上","B"],["weight","体重；重量","B"],["hamburger","汉堡包","B"],["cause","造成；导致","B"],["heart","心脏；中心","B"],["balanced","均衡的；平衡的","B"],["too ... to","太⋯⋯以至于不能","B"],["sleepy","困倦的；想睡的","B"],["after all","毕竟；终归","B"],["away","离开；在别处","B"],["poor","不好的；贫穷的；可怜的","B"],["result","后果；结果","B"],["article","文章；冠词","B"],["common","普通的；共同的","B"],["among","在……中；……之一","B"],["soft","柔和的；柔软的","B"],["soft drink","软饮料（不含酒精）","B"],["enough","足够地；充分地 adv. 足够地；充分地 pron. 足够；充分","B"],["thirsty","渴的","B"],["Gongbao chicken","宫保鸡丁","B"],["America","美国；美洲","B"],["Dongpo pork","东坡肉","B"],["tea","茶；茶叶","A"],["bread","面包","A"],["ice cream","冰激凌","A"],["vegetable","蔬菜","A"],["soup","汤","A"],["rice","米饭；大米","A"],["cup","杯","A"],["banana","香蕉","A"],["hungry","饥饿的","B"],["doctor","医生","B"],["young","年轻的","B"]],"phrases":[["fish and chips","炸鱼薯条","A"],["What about ...?","⋯⋯怎么样？","A"],["go with","搭配；相配","A"],["too much","太多","A"],["fast food","快餐","B"],["put on","增加；穿上","B"],["too ... to","太⋯⋯以至于不能","B"],["after all","毕竟；终归","B"],["soft drink","软饮料（不含酒精）","B"],["Gongbao chicken","宫保鸡丁","B"],["Dongpo pork","东坡肉","B"],["ice cream","冰激凌","A"],["would like a salad","想要一份沙拉","A"],["a bowl of dumplings","一碗饺子","A"],["for breakfast","作为早餐","A"],["soft drinks","软饮料","A"],["anything else","还要别的吗","A"],["eat well","吃得好","B"],["too much salt","太多盐","B"],["put on weight","长胖","B"],["a balanced diet","均衡饮食","B"],["make healthy choices","做出健康选择","B"]],"sentences":[["What do you usually have for breakfast?","你早餐通常吃什么？","A"],["I usually have bread and milk.","我通常吃面包和牛奶。","A"],["Would you like some hamburgers?","你想要一些汉堡吗？","A"],["No, thanks. I'd like a salad.","不，谢谢。我想要一份沙拉。","A"],["What about some Gongbao chicken?","来点宫保鸡丁怎么样？","A"],["May I have the menu, please?","请给我菜单好吗？","A"],["I'd like a bowl of dumplings.","我想要一碗饺子。","A"],["The waiter is serving the customers.","服务员正在为顾客上菜。","A"],["Anything else to drink?","还要别的喝的吗？","A"],["It's important to eat well.","吃得好很重要。","B"],["We should make healthy choices.","我们应该做出健康的选择。","B"],["There is too much salt in the soup.","汤里的盐太多了。","B"],["We need to drink more water.","我们需要多喝水。","B"],["Fast food can cause heart problems.","快餐会导致心脏问题。","B"],["Too much sugar is bad for you.","太多糖对你不好。","B"],["A balanced diet gives you enough energy.","均衡饮食给你足够的能量。","B"],["I'm trying to improve my eating habits.","我在努力改善饮食习惯。","B"],["Don't put on weight by eating late.","别因为吃得晚而长胖。","B"]]},{"unit":"Unit 5","title":"Here and Now","words":[["wash","洗；洗澡","A"],["free","空闲的；免费的","A"],["holiday","假期","A"],["boat","小船；小艇","A"],["supermarket","超市","A"],["boy","男孩","A"],["city","城市","A"],["street","街道","A"],["light","灯；光 轻的","A"],["move","移动；搬动","A"],["river","河","A"],["bag","袋子","A"],["by","靠近；在⋯⋯旁边","A"],["wonderful","精彩的；绝妙的","A"],["taxi","出租车","A"],["sun","太阳","A"],["right now","现在；立刻","A"],["ride","骑；n. 旅程","A"],["moment","某个时刻；片刻；瞬间","A"],["at the moment","现在；此刻","A"],["work on","做；从事","A"],["dragon","龙","A"],["festival","节日","A"],["hold","拿着；抓住","A"],["hold on","别挂断电话；等等","A"],["voice","嗓音；声音","A"],["race","比赛；竞赛","A"],["darling","亲爱的；宝贝","A"],["somebody","某人；有人","A"],["could","能；可以","A"],["message","消息；信息","A"],["take a message","捎个口信","A"],["leave a message","留个口信","A"],["call back","回电话","A"],["kick","踢；踹","A"],["wow","哇；呀","A"],["online","在线的","A"],["shuttlecock","羽毛球","A"],["sight","名胜；风景；视力","A"],["exam","考试（= examination）","A"],["hope","希望","A"],["forward","向前","A"],["look forward to","盼望","A"],["skate","滑冰","B"],["happen","发生","B"],["zone","地区；地带；区域","B"],["time zone","时区","B"],["around the world","世界各地","B"],["rush","冲；奔","B"],["in a hurry","匆忙","B"],["shine","发光；照耀；n. 光亮","B"],["brightly","明亮地","B"],["colourful","色彩鲜艳的","B"],["slowly","缓慢地","B"],["such","这样的；那样的；pron. 这样的（那样的）人或事物","B"],["such as","例如","B"],["painting","绘画作品；油画","B"],["market","市场","B"],["side","边；侧","B"],["side by side","并排；并肩","B"],["subway","地铁","B"],["bright","鲜艳的；明亮的；聪明的","B"],["drop","把……送至；落下；n. 滴；下降","B"],["drop off","（开车）把某人送到某处","B"],["passenger","乘客","B"],["central","中心的；中央的","B"],["explain","解释；说明","B"],["take part in","参加","B"],["tour","旅行；旅游","B"],["sunshine","阳光","B"],["drive","开车；驾驶","B"],["rush hour","（上下班时的）交通高峰期","B"],["Adam","亚当","B"],["Dragon Boat Festival","端午节","B"],["Beth","贝丝","B"],["Nairobi","内罗毕（肯尼亚首都）","B"],["New York","纽约","B"],["Kenya","肯尼亚","B"],["USA","美国","B"],["Central Park","中央公园","B"]],"phrases":[["right now","现在；立刻","A"],["at the moment","现在；此刻","A"],["work on","做；从事","A"],["hold on","别挂断电话；等等","A"],["take a message","捎个口信","A"],["leave a message","留个口信","A"],["call back","回电话","A"],["look forward to","盼望","A"],["time zone","时区","B"],["around the world","世界各地","B"],["in a hurry","匆忙","B"],["such as","例如","B"],["side by side","并排；并肩","B"],["drop off","（开车）把某人送到某处","B"],["take part in","参加","B"],["rush hour","（上下班时的）交通高峰期","B"],["Dragon Boat Festival","端午节","B"],["New York","纽约","B"],["Central Park","中央公园","B"],["do my homework","做作业","A"],["play basketball","打篮球","A"],["in the library","在图书馆","A"]],"sentences":[["What are you doing now?","你现在在做什么？","A"],["I'm doing my homework.","我正在写作业。","A"],["Is he playing basketball?","他正在打篮球吗？","A"],["Yes, he is.","是的，他在打。","A"],["What is she doing at the moment?","她此刻在做什么？","A"],["She is reading a book in the library.","她正在图书馆看书。","A"],["We are having an English class.","我们正在上英语课。","A"],["Look! The children are running on the playground.","看！孩子们正在操场上跑步。","A"],["Are you washing your clothes right now?","你现在正在洗衣服吗？","A"],["Hold on, please. I'm coming.","请等一下，我马上来。","A"],["People around the world are doing different things.","世界各地的人正在做不同的事。","B"],["It's eight o'clock in the morning in Beijing.","北京现在是早上八点。","B"],["The sun is shining brightly.","阳光明媚。","B"],["Some people are rushing to work in a hurry.","有些人正匆忙赶去上班。","B"],["I'm looking forward to your message.","我期待你的消息。","B"],["Could you take a message for me?","你能帮我捎个口信吗？","B"],["The Dragon Boat Festival is coming.","端午节快到了。","B"],["We are taking part in a boat race.","我们正在参加划船比赛。","B"],["The taxi is dropping off passengers.","出租车正在让乘客下车。","B"]]},{"unit":"Unit 6","title":"Rain or Shine","words":[["rain or shine","不论是雨还是晴；不管发生什么事","A"],["affect","影响","A"],["dry","干的；干旱的","A"],["lightning","闪电","A"],["stormy","有暴风雨（或暴风雪）的","A"],["north","北部；北；北方","A"],["west","西部；西；西方","A"],["south","南部；南；南方","A"],["east","东部；东；东方","A"],["stay in","待在家里；没有外出","A"],["lucky","运气好的；带来好运的","A"],["lucky you","你真幸运","A"],["sunbathe","沐日光浴；晒太阳","A"],["some day","将来；有朝一日","A"],["temperature","温度","A"],["snowman","雪人","A"],["heavily","大量地；沉重地","A"],["snowy","下雪的；雪白的","A"],["beach volleyball","沙滩排球","A"],["high","高","A"],["freezing","极冷的；冰冻的","A"],["tourist","旅行者；观光客","A"],["mount","（在现代英语里仅用于地名）山；山峰","B"],["cloud","云；云彩","B"],["feel like","感觉像","B"],["magical","魔法的；神奇的","B"],["rock","岩石","B"],["rest","休息；剩余部分","B"],["area","场地；地区","B"],["rest area","休息区","B"],["make progress","取得进展","B"],["although","虽然；尽管","B"],["still","还；仍然","B"],["in high spirits","情绪高涨；兴高采烈","B"],["experience","经历；经验；v. 经历","B"],["through","穿过；凭借","B"],["glad","高兴的","B"],["peak","山顶；顶点","B"],["grey","灰色的","B"],["because of","因为","B"],["fog","雾","B"],["ground","地面","B"],["wet","湿的","B"],["tiring","令人疲倦的；累人的","B"],["seem","似乎；好像","B"],["sunlight","阳光；日光","B"],["at the top","在顶端；在顶部","B"],["description","描述；说明","B"],["mountain","山；高山","B"],["at the start","开始；起初","B"],["end","末尾；结束","B"],["at the end","最后；在末尾","B"],["storm","暴风雨；暴风雪","B"],["pour","倾倒；倒出","B"],["wind","风","B"],["shout","喊叫；呼唤","B"],["run after","追逐","B"],["Anna","安娜","B"],["John","约翰","B"],["Stockholm","斯德哥尔摩（瑞典首都）","B"],["Mount Huangshan","黄山","B"],["Bright Peak","光明顶","B"],["rain","雨 下雨","A"],["weather","天气；气象","A"],["cloudy","多云的；阴天的","A"],["windy","多风的；风大的","A"],["sunny","阳光充足的；开朗的","A"],["hometown","家乡；故乡","A"],["sad","伤心的；难过的","A"],["beach","海滩；海滨","A"],["snow","下雪 雪","A"],["winter","冬季；冬天","A"],["summer","夏季；夏天","A"],["sweater","毛衣","A"],["kite","风筝","A"],["spring","春季；春天","A"],["season","季节","A"],["umbrella","伞","A"],["dirty","肮脏的","B"],["top","顶部；顶端 顶部的；顶端的","B"],["man","男人","B"],["angry","愤怒的；生气的","B"]],"phrases":[["rain or shine","不论是雨还是晴；不管发生什么事","A"],["stay in","待在家里；没有外出","A"],["lucky you","你真幸运","A"],["some day","将来；有朝一日","A"],["beach volleyball","沙滩排球","A"],["feel like","感觉像","B"],["rest area","休息区","B"],["make progress","取得进展","B"],["in high spirits","情绪高涨；兴高采烈","B"],["because of","因为","B"],["at the top","在顶端；在顶部","B"],["at the start","开始；起初","B"],["at the end","最后；在末尾","B"],["run after","追逐","B"],["Mount Huangshan","黄山","B"],["Bright Peak","光明顶","B"],["heavy rain","大雨","A"],["high temperature","高温","A"],["because of the fog","因为雾","B"],["feel like spring","感觉像春天","B"],["at the end of the day","在一天结束时","B"]],"sentences":[["What's the weather like?","天气怎么样？","A"],["It's warm and sunny.","天气温暖，阳光明媚。","A"],["How's the weather in Beijing?","北京天气怎么样？","A"],["It's raining heavily.","雨下得很大。","A"],["We usually stay in when it snows.","下雪时我们通常待在家里。","A"],["Lucky you!","你真幸运！","A"],["Is it windy or cloudy today?","今天有风还是多云？","A"],["The temperature is high in summer.","夏天温度很高。","A"],["Rain or shine, we will go.","风雨无阻，我们都会去。","A"],["We are climbing Mount Huangshan.","我们正在爬黄山。","B"],["The clouds look magical at the top.","山顶的云看起来很神奇。","B"],["Although it is tiring, we are in high spirits.","虽然很累，但我们兴致很高。","B"],["The ground is wet because of the fog.","因为有雾，地面是湿的。","B"],["We had a wonderful experience at the peak.","我们在顶峰有一段美妙的经历。","B"],["The storm is pouring down.","暴风雨倾盆而下。","B"],["It feels like spring today.","今天感觉像春天。","B"],["At the end of the day we had a rest.","一天结束时我们休息了一下。","B"]]},{"unit":"Unit 7","title":"A Day to Remember","words":[["meet up","碰头；相聚","A"],["museum","博物馆","A"],["exhibition","展览","A"],["direction","方向","A"],["trip","旅行","A"],["wastewater","废水","A"],["plant","工厂","A"],["into","到……里面；进入","A"],["remove","移开；拿走","A"],["piece","片；块","A"],["waste","废弃物；浪费","A"],["machine","机器","A"],["germ","微生物；细菌","A"],["step","步骤；脚步","A"],["used to","过去常常（做）","A"],["realize","认识到；实现","A"],["inside","在……里面；adv. 在里面","A"],["go on a trip","去旅行","A"],["process","过程","A"],["theatre","戏院；剧场；电影院","A"],["factory","工厂","A"],["terrible","糟糕的","A"],["actor","演员","A"],["gun","枪","A"],["try on","试穿","A"],["along","沿着；顺着","A"],["road","道路","A"],["create","创造","A"],["record","记录；n. 记录","A"],["skill","技能","B"],["write down","写下；记下","B"],["explore","探索","B"],["tent","帐篷","B"],["cucumber","黄瓜","B"],["from ... to ...","从⋯⋯到⋯⋯","B"],["straight","直接；立即；adj. 笔直的","B"],["fill","装满；盛满","B"],["basket","篮子；筐","B"],["teach","教（过去式 taught）","B"],["branch","分支；树枝","B"],["leaf","叶子（pl. leaves）","B"],["finally","终于","B"],["think of","考虑；想起","B"],["grain","谷物；谷粒","B"],["fresh","新鲜的","B"],["certainly","肯定地","B"],["diary","日记；日记本","B"],["entry","（日记的）一则；入口","B"],["agree","赞成；同意","B"],["agree with","赞成；同意","B"],["wrong","错误的","B"],["bus","公交车","A"],["astronaut","宇航员","A"],["robot","机器人","A"],["again","再一次；又一次","A"],["zoo","动物园","A"],["yesterday","昨天","A"],["space","太空；空间","A"],["stop","停下","A"],["farmer","农场主；农民","B"]],"phrases":[["meet up","碰头；相聚","A"],["used to","过去常常（做）","A"],["go on a trip","去旅行","A"],["try on","试穿","A"],["write down","写下；记下","B"],["from ... to ...","从⋯⋯到⋯⋯","B"],["think of","考虑；想起","B"],["agree with","赞成；同意","B"],["go on a school trip","参加学校旅行","A"],["meet up with friends","和朋友碰面","A"],["a piece of paper","一张纸","A"],["learn how to do sth","学会怎么做某事","A"],["last week","上周","A"],["fill the baskets","装满篮子","B"],["think of an idea","想到一个主意","B"],["a day to remember","值得记住的一天","B"],["agree with sb","同意某人","B"],["learn a lot from","从……学到很多","B"],["fresh vegetables","新鲜蔬菜","B"]],"sentences":[["How was your school trip?","你的学校旅行怎么样？","A"],["It was terrible.","很糟糕。","A"],["Did you see anything interesting at the science museum yesterday?","昨天你在科学博物馆看到有趣的东西了吗？","A"],["Yes, I did. There were robots.","是的。有机器人。","A"],["Did you go on a school trip a week ago?","一周前你们去学校旅行了吗？","A"],["We went to a wastewater plant.","我们去了一家废水处理厂。","A"],["I met up with my old friends at the museum.","我在博物馆和老朋友碰面了。","A"],["Then we got straight to work.","然后我们直接开始干活。","A"],["The machine removes germs from the water.","机器去除水中的细菌。","A"],["We learned how water becomes clean.","我们了解了水如何变干净。","A"],["We went on a trip to a farm.","我们去农场旅行了。","B"],["The farmer taught us how to pick cucumbers.","农民教我们怎么摘黄瓜。","B"],["We filled the baskets with fresh vegetables.","我们把篮子装满了新鲜蔬菜。","B"],["I wrote down every step in my diary.","我在日记里记下了每一步。","B"],["It was a day to remember.","那是值得记住的一天。","B"],["Finally, we agreed that hard work is fun.","最后，我们一致认为劳动很有趣。","B"],["The leaves on the branches were green.","树枝上的叶子是绿色的。","B"],["I certainly learned a lot from the trip.","我确实从这次旅行中学到很多。","B"]]},{"unit":"Unit 8","title":"Once upon a Time","words":[["upon","在……上","A"],["once upon a time","很久很久以前","A"],["bite","咬；咬伤","A"],["bite through","咬穿","A"],["net","网；网状物","A"],["hunter","猎人；搜寻者","A"],["promise","承诺；保证；诺言","A"],["long ago","很久以前","A"],["war","战争","A"],["neighbour","邻居","A"],["wise","明智的；高明的","A"],["emperor","皇帝","A"],["lie","撒谎；n. 谎言","A"],["pretend","假装；伪装","A"],["official","官员；高级职员","A"],["silly","愚蠢的；傻的","A"],["decide","决定","A"],["praise","赞美；表扬","A"],["afraid","害怕的；担心的","A"],["suddenly","突然地；出乎意料地","A"],["at first","起初；最初","A"],["truth","真相；事实","A"],["tell the truth","说实话","A"],["make money","赚钱","A"],["true","符合事实的；真正的","A"],["hate","不喜欢；厌恶；讨厌","A"],["get out","逃脱；离开","A"],["king","君主；国王","A"],["artist","美术家；艺术家","A"],["quickly","快速地；很快","A"],["smile","微笑；n. 微笑；笑容","A"],["all over","到处；遍及","A"],["ugly","丑陋的；难看的","B"],["duckling","小鸭子","B"],["real","真的；真正的","B"],["laugh at","嘲笑","B"],["go away","走开","B"],["search","寻找；搜寻","B"],["search for","寻找","B"],["hen","母鸡","B"],["hopefully","有希望地","B"],["purr","（猫愉快时）发出呜呜声","B"],["lay","（laid/laɪd）下（蛋）；放置；搁","B"],["swan","天鹅","B"],["feather","羽毛","B"],["to sb's surprise","出乎某人的意料","B"],["size","大小；尺寸","B"],["believe","相信；认为","B"],["only if","只有……","B"],["fisherman","渔夫","B"],["fishing","钓鱼；捕鱼","B"],["come out","出现；盛开","B"],["genie","妖怪；鬼","B"],["die","死亡；消失","B"],["make a promise","许下诺言","B"],["someone","某人；有人","B"],["set","使处于某种状态；使开始","B"],["set ... free","释放","B"],["rich","富有的；富含……的","B"],["powerful","强大的；有影响力的","B"],["anyone","任何人；某个人","B"],["instead of","而不是；代替","B"],["succeed in doing sth","成功做成某事","B"],["himself","他自己；他本人","B"],["in the end","最后；终究","B"],["Hans Christian Andersen","汉斯·克里斯蒂安·安徒生","B"],["catch","捕捉；接住",""],["sell (sold)","出售",""],["arm","手臂；上肢",""],["leg","腿",""],["cry","大叫；哭",""],["money","钱；财富",""]],"phrases":[["once upon a time","很久很久以前","A"],["bite through","咬穿","A"],["long ago","很久以前","A"],["at first","起初；最初","A"],["tell the truth","说实话","A"],["make money","赚钱","A"],["get out","逃脱；离开","A"],["all over","到处；遍及","A"],["laugh at","嘲笑","B"],["go away","走开","B"],["search for","寻找","B"],["to sb's surprise","出乎某人的意料","B"],["only if","只有……","B"],["come out","出现；盛开","B"],["make a promise","许下诺言","B"],["set ... free","释放","B"],["instead of","而不是；代替","B"],["succeed in doing sth","成功做成某事","B"],["in the end","最后；终究","B"],["Hans Christian Andersen","汉斯·克里斯蒂安·安徒生","B"],["catch a lion","抓住一头狮子","A"],["laugh at sb","嘲笑某人","B"],["search for a home","寻找一个家","B"],["to his surprise","令他惊讶的是","B"],["come out of the bottle","从瓶子里出来","B"]],"sentences":[["Once upon a time, there was an ugly duckling.","很久很久以前，有一只丑小鸭。","A"],["What happened next?","接下来发生了什么？","A"],["The emperor liked new clothes very much.","皇帝非常喜欢新衣服。","A"],["The hunter caught the lion in a net.","猎人用网抓住了狮子。","A"],["He promised to help the mouse.","他答应帮助老鼠。","A"],["Why did the mouse bite the net?","老鼠为什么咬破了网？","A"],["Long ago, a wise man lived in the village.","很久以前，村里住着一位智者。","A"],["The officials pretended to see the clothes.","官员们假装看见了衣服。","A"],["No one dared to tell the truth.","没人敢说真话。","A"],["The story has a happy ending.","这个故事有一个圆满的结局。","A"],["What an ugly duckling!","多么丑的一只小鸭啊！","B"],["Everyone laughed at the little duckling.","大家都嘲笑这只小鸭。","B"],["He went away and searched for a new home.","他离开去寻找新家。","B"],["To his surprise, he became a beautiful swan.","令他惊讶的是，他变成了一只美丽的天鹅。","B"],["The fisherman set the genie free.","渔夫把精灵放了出来。","B"],["In the end, the wise man succeeded.","最后，智者成功了。","B"],["Only if you believe in yourself can you succeed.","只有相信自己才能成功。","B"],["The story teaches us to be true.","这个故事教我们要真诚。","B"],["The genie came out of the bottle.","精灵从瓶子里出来了。","B"]]}]}};
+
+/* ===== 知识清单数据（全品作业本·背诵本 P18–24） ===== */
+const EXTRA_UNITS=[{"id":"u1","name":"Unit 1","title":"You and Me"},{"id":"u2","name":"Unit 2","title":"We're Family!"},{"id":"u3","name":"Unit 3","title":"My School"}];
+const EXTRA_CATS=[["xx","小学词汇"],["zd","重点单词"],["cx","词形变化"],["dy","重点短语"],["jx","重点句型"]];
+const EXTRA_DATA={"u1":{"A":{"xx":[["we","pron. 我们"],["make","v. 使成为；制造"],["friend","n. 朋友"],["get","v. 去取(或带来)；得到"],["know","v. 知道"],["from","prep. 从……来；从……开始"],["may","modal v. 可以；可能"],["old","adj. 老的；旧的"],["last","adj. 最后的；末尾的"],["year","n. 年"],["yes","interj. 是的；可以"],["Mr","（用于男子的姓氏或姓名前）先生"],["our","pron. 我们的"],["English","n. 英语；英格兰人 adj. 英语的；英格兰的"],["teacher","n. 教师"],["which","pron. 哪一个；哪一些"],["who","pron. 谁；什么人"],["job","n. 工作"],["student","n. 学生"],["age","n. 年龄"],["she","pron. 她"],["favourite","adj. 最喜欢的；最爱的"],["pet","n. 宠物"],["very","adv. 很；非常"],["cute","adj. 可爱的"],["much","adv. 非常；十分 pron. & adj. 许多；大量"],["China","中国"],["panda","n. 熊猫"],["hot","adj. 热的；炎热的"],["also","adv. 也；而且"],["now","adv. 现在；目前"],["live","v. 居住；生活"],["with","prep. 和……在一起；带有；使用"],["parent","n. 父(母)亲"],["Chinese","adj. 中国的 n. 中国人；汉语"],["food","n. 食物"]],"zd":[["each","adj. & pron. 每个；各自"],["other","pron. 另外的人(或物) adj. 另外的；其他的"],["full","adj. 完整的；满的"],["grade","n. 年级；等级"],["classmate","n. 同班同学"],["mistake","n. 错误；失误"],["country","n. 国家"],["same","adj. 相同的"],["twin","n. 双胞胎之一 adj. 双胞胎之一的"],["pot","n. 锅"],["tofu","n. 豆腐"]],"cx":[["what's","what is（缩写）","what is—(缩写)what's"],["we're","we are（缩写）","we are—(缩写)we're"],["who's","who is（缩写）","who is—(缩写)who's"],["countries","country（复数）","country—(复数)countries"],["my","I（形容词性物主代词）","I—(形容词性物主代词)my"],["his","he（形容词性物主代词）","he—(形容词性物主代词)his"],["her","she（形容词性物主代词）","she—(形容词性物主代词)her"],["friends","friend（复数）","friend—(复数)friends"]],"dy":[["make friends","交朋友"],["get to know","认识；了解"],["each other","互相；彼此"],["spell your name","拼写你的名字"],["be from","来自"],["how old","几岁 / 多少岁"],["full name","全名"],["last name","姓氏"],["12 years old","12 岁"],["class teacher","班主任"],["my mistake","我的错"],["Chen Jie and Peter's English teacher","陈洁和彼得的英语老师"],["the first name of ...","……的名字"],["the same class","相同的班级"],["Lin Hai's favourite colour","林海最喜欢的颜色"],["like ... very much","非常喜欢……"],["live in ...","住在……"]],"jx":[["What's your name?","你叫什么名字？"],["My name is Peter.","我叫彼得。"],["How old are you?","你多大了？"],["I'm 12 years old.","我12岁。"],["Where are you from?","你来自哪里？"],["I'm from China.","我来自中国。"],["What class are you in?","你在哪个班？"],["I'm in Class 1, Grade 7.","我在七年级一班。"],["We're in the same class. Let's be friends!","我们在同一个班。我们做朋友吧！"],["What's your full name?","你的全名是什么？"],["My last name is Brown.","我姓布朗。"]]},"B":{"xx":[["about","prep. 关于 adv. 大约"],["wall","n. 墙"],["family","n. 家庭"],["speak","v. 说(某种语言)；说话"],["sport","n. 运动"],["often","adv. 时常；常常"],["play","v. 玩"],["after","prep. & conj. 在……以后"],["school","n. 学校"],["want","v. 想要"],["be","v. 是"],["place","n. 地方；地点"],["music","n. 音乐"],["love","v. & n. 喜爱；爱"]],"zd":[["need","v. & n. 需要"],["parrot","n. 鹦鹉"],["guitar","n. 吉他"],["tennis","n. 网球；网球运动"],["would","modal v. 想(用于礼貌地邀请或向某人提供某物)；将会"],["information","n. 信息；消息"],["hobby","n. 业余爱好"],["re","prep. (用于回复电子邮件)关于；事由"]],"cx":[["hobbies","hobby（复数）","hobby—(复数)hobbies"],["likes","like（第三人称单数）","like—(第三人称单数)likes"],["lives","live（第三人称单数）","live—(第三人称单数)lives"]],"dy":[["need to do sth","需要做某事"],["know about","了解"],["a new friend","一位新朋友"],["two students' posts","两名学生的帖子"],["speak Chinese","说汉语"],["want to be","想要成为"],["after school","放学后"],["play the guitar","弹吉他"],["would like to be","愿意成为"],["write to sb","给某人写信"],["personal profile","个人简介"],["every weekend","每周末"],["play basketball","打篮球"]],"jx":[["I like Chinese food a lot.","我非常喜欢中国食物。"],["Would you like to be my friend?","你愿意做我的朋友吗？"],["What's your hobby?","你的爱好是什么？"],["I like playing the guitar.","我喜欢弹吉他。"],["My favourite food is hot pot.","我最喜欢的食物是火锅。"],["I have a pet parrot.","我有一只宠物鹦鹉。"],["We get to know each other.","我们互相认识了。"],["Please write to me soon.","请尽快给我回信。"]]}},"u2":{"A":{"xx":[["or","conj. 或者；也不(用于否定句)"],["mother","n. 母亲"],["child","n. (pl. children) 儿童；小孩"],["sister","n. 姐；妹"],["brother","n. 兄；弟"],["cousin","n. 堂兄(弟、姊、妹)；表兄(弟、姊、妹)"],["aunt","n. 姑(姨、伯、婶、舅)母"],["grandmother","n. (=grandma) 奶奶；外婆"],["come","v. 来；来到"],["ping-pong","n. 乒乓球运动"],["every","adj. 每一；每个"],["day","n. 一天；白天"],["week","n. 周"],["father","n. 父亲；爸爸"],["lot","pron. 大量；许多"],["read","v. 读；阅读"],["piano","n. (pl. pianos) 钢琴"],["well","adv. 好；令人满意地 interj. 嗯；好吧 adj. 健康的"],["basketball","n. 篮球；篮球运动"],["classroom","n. 教室"],["their","pron. 他(她、它)们的"],["little","adj. 小的；年幼的"],["ball","n. 球"],["playground","n. 游乐场；操场"],["talk","v. & n. 说话；交谈"],["tall","adj. 高的"],["short","adj. 短的；矮的"],["hair","n. 头发"],["long","adj. 长的"],["quiet","adj. 安静的"],["girl","n. 女孩"],["but","conj. 但是"],["any","adj. & pron. 任何(的)；任一(的)"]],"zd":[["mean","v. 意思是；打算"],["husband","n. 丈夫"],["bat","n. 球棒；球拍"],["together","adv. 在一起；共同"],["spend","v. 花(时间、钱等)"],["hey","interj. 嘿；喂"],["really","adv. 非常；确实；真正地"],["member","n. 成员；会员"],["activity","n. 活动"],["chess","n. 国际象棋"],["grandparent","n. 祖父(母)；外祖父(母)"],["funny","adj. 好笑的；奇怪的"],["laugh","v. 笑；发笑 n. 笑声"],["different","adj. 不同的"]],"cx":[["spends","spend（第三人称单数）","spend—(第三人称单数)spends"],["activities","activity（复数）","activity—(复数)activities"],["has","have（第三人称单数）","have—(第三人称单数)has"],["likes","like（第三人称单数）","like—(第三人称单数)likes"],["their / them","they（形容词性物主代词、人称代词宾格）","they—(形容词性物主代词)their—(人称代词宾格)them"]],"dy":[["your mum's or dad's mother","你妈妈或爸爸的妈妈"],["your aunt and uncle's child","你婶婶和叔叔的孩子"],["a lot of / lots of","大量；许多"],["ping-pong bat","乒乓球拍"],["play ping-pong","打乒乓球"],["every day","每天"],["a lot","很；非常"],["spend time doing sth","花费时间做某事"],["play the piano","弹钢琴"],["Chinese chess","中国象棋"],["play it well","（二胡）拉得好"],["like flowers","喜欢花"],["like doing sth","喜欢做某事"],["make sb do sth","让某人做某事"],["play tennis","打网球"],["have fun","玩得高兴"],["play sport","做运动"],["play with sth","玩某物"],["my little brother","我的弟弟"],["in the playground","在操场上"]],"jx":[["Is this your mother?","这是你的妈妈吗？"],["No, it isn't.","不，不是。"],["Whose fishing rods are those?","那些是谁的钓鱼竿？"],["They're my father's.","它们是我爸爸的。"],["He spends a lot of time fishing.","他花很多时间钓鱼。"],["How many people are there in your family?","你家有几口人？"],["There are five.","有五口人。"],["Do you play ping-pong together?","你们一起打乒乓球吗？"],["My grandpa plays Chinese chess every day.","我爷爷每天下中国象棋。"]]},"B":{"xx":[["here","adv. 在这里"],["photo","n. (=photograph, pl. photos) 照片"],["pink","adj. & n. 粉红色(的)"],["always","adv. 总是"],["night","n. 夜晚"],["think","v. 思考"],["all","pron. & adj. 所有(的)；全部(的)"],["listen","v. 听"],["football","n. 足球；足球运动"],["happy","adj. 快乐的"],["eye","n. 眼睛"],["clever","adj. 聪明的"],["next","adj., adv. & n. 下一个(的)"],["him","pron. (he 的宾格)他"],["help","v. & n. 帮助"]],"zd":[["hat","n. 帽子"],["handsome","adj. 英俊的"],["knee","n. 膝；膝盖"],["grandchild","n. (外)孙子；(外)孙女"],["son","n. 儿子"]],"cx":[["children","child（复数）","child—(复数)children"],["plays","play（第三人称单数）","play—(第三人称单数)plays"],["my / me","I（形容词性物主代词、人称代词宾格）","I—(形容词性物主代词)my—(人称代词宾格)me"],["parents","parent（复数）","parent—(复数)parents"],["his","he（形容词性物主代词）","he—(形容词性物主代词)his"],["her","she（形容词性物主代词、人称代词宾格）","she—(形容词性物主代词)her—(人称代词宾格)her"],["us","we（人称代词宾格）","we—(人称代词宾格)us"],["brothers","brother（复数）","brother—(复数)brothers"],["funny","fun（形容词）","fun—(形容词)funny"]],"dy":[["how many","多少"],["in your family","在你的家庭中"],["be like","像"],["a photo of","……的照片"],["on one's knee","在某人的膝盖上"],["read with sb","和某人一起读"],["at night","在夜晚"],["the same thing","同样的事"],["all of us","我们所有人"],["Jack and Sarah's son","杰克和萨拉的儿子"],["family photo","家庭照片"],["like to do sth","喜欢做某事"],["listen to","听；倾听"],["next to","紧邻；在……近旁"],["each other","彼此；互相"],["a bit quiet","有点儿安静"],["watch films","看电影"]],"jx":[["Here's a photo of us.","这是我们的一张照片。"],["The girl in pink is my sister.","穿粉衣服的女孩是我妹妹。"],["My mum is in the middle.","我妈妈在中间。"],["My little brother is next to me.","我弟弟在我旁边。"],["We have fun at night.","我们晚上玩得很开心。"],["My family often goes hiking.","我家经常去远足。"],["She has long hair and big eyes.","她有长头发和大眼睛。"],["I love my family very much.","我非常爱我的家人。"]]}},"u3":{"A":{"xx":[["front","n. 前面"],["art","n. 艺术；美术"],["middle","n. 中间 adj. 中间的"],["between","prep. 在……之间"],["library","n. 图书馆"],["blackboard","n. 黑板"],["up","adv. 向上"],["back","n. 后部；背部 adj. 后面的；背后的 adv. 回来；回原处"],["clock","n. 时钟；钟"],["map","n. 地图"],["computer","n. 电脑"],["window","n. 窗户"],["science","n. 科学"],["picture","n. 照片；图画"],["famous","adj. 著名的"],["table","n. 桌子"],["today","adv. 在今天 n. 今天"]],"zd":[["hall","n. 礼堂；大厅"],["building","n. 建筑物；房子"],["across","adv. & prep. 在(……)对面；横过"],["centre","n. (=center) 中心；中央"],["gym","n. 体育馆；健身房；(尤指学校的)体育活动"],["field","n. 场地；田地"],["office","n. 办公室"],["large","adj. 大的；大号的"],["special","adj. 特别的；特殊的"],["smart","adj. 智能的；聪明的"],["whiteboard","n. 白板；白色书写板"],["important","adj. 重要的"],["notice","n. 通知；注意 v. 注意到；意识到"],["locker","n. 有锁存物柜；寄物柜"],["drawer","n. 抽屉"],["corner","n. 角；墙角；街角"],["bookcase","n. 书架；书柜"],["screen","n. 屏幕；银幕"]],"cx":[["notices","notice（复数）","notice—(复数)notices"],["lockers","locker（复数）","locker—(复数)lockers"],["drawers","drawer（复数）","drawer—(复数)drawers"],["bookcases","bookcase（复数）","bookcase—(复数)bookcases"]],"dy":[["in front of","在……前面"],["in the middle of","在……中间"],["across from","在对面"],["between ... and ...","在……和……之间"],["put up","张贴；搭建；举起"],["at the back (of)","在(……)后面"],["put ... in ...","把……放进……里"],["put ... on ...","把……放到……上"],["reading corner","阅读角；读书角"],["the teacher's desk","讲桌"],["behind the classroom building","在教学楼后面"],["at long tables","在长桌子旁边"]],"jx":[["There is a library behind the classroom building.","教学楼后面有一个图书馆。"],["There are some trees in front of the sports field.","运动场前面有一些树。"],["Where is the teachers' office?","教师办公室在哪里？"],["It's on the second floor.","在二楼。"],["Is there a whiteboard in your classroom?","你们教室里有白板吗？"],["Yes, there is.","是的，有。"],["The science lab is between the art room and the music room.","科学实验室在美术室和音乐室之间。"],["The dining hall is across from the gym.","餐厅在体育馆对面。"],["We put up important notices on the board.","我们把重要通知贴在板上。"]]},"B":{"xx":[["email","n. 电子邮件 v. (给某人)发电子邮件"],["answer","v. 回答；答复 n. 答案"],["question","n. 问题"],["exercise","n. & v. 运动；锻炼；练习"],["way","n. 方式；道路"],["clean","adj. 干净的 v. 使……干净；打扫"],["best","adj. 最好的 adv. 最"],["because","conj. 因为"],["why","adv. 为什么"],["dear","adj. 亲爱的"],["tell","v. 告诉"],["interesting","adj. 有趣的"]],"zd":[["modern","adj. 现代的；当代的"],["amazing","adj. 令人惊奇(惊喜或惊叹)的"],["raise","v. 使升高；提高"],["flag","n. 旗；旗帜"],["most","adj. & pron. 大多数；最多；最大 adv. 最"],["change","v. & n. 改变；变化"],["seat","n. 座位"],["delicious","adj. 美味的；可口的"],["yours","pron. (通常写作 Yours)你的；您的"],["send","v. 发送；邮寄"],["similar","adj. 类似的；相像的"],["sound","v. 听起来；好像 n. 声音；响声"]],"cx":[["amaze","amazing（动词）","amazing—(动词)amaze"],["difference","different（名词）","different—(名词)difference"]],"dy":[["at school","在学校"],["different from","与……不一样"],["do exercises","做体操"],["How about ...?","……怎么样？"],["thanks for","为……而感谢你"],["raise the flag","升旗"],["most of the time","大部分时间"],["change seats","换座位"],["many kinds of","很多种类的"],["similar to","和……相似"],["sound(s) fun","听起来有趣"],["would like to do sth","想要做某事"],["tell sb about ...","告诉某人关于……"],["bye for now","再见"]],"jx":[["My school is modern and beautiful.","我的学校既现代又漂亮。"],["We do exercises on the sports field.","我们在运动场上做操。"],["The food in our dining hall is delicious.","我们餐厅的食物很美味。"],["How about your new school?","你的新学校怎么样？"],["It is similar to mine.","它和我的学校很像。"],["We raise the flag every Monday.","我们每周一升国旗。"],["I sit next to the window.","我坐在窗边。"],["Bye for now!","先写到这儿，再见！"],["Tell me about your school, please.","请给我讲讲你的学校。"]]}}};
+
+/* ===== 工具 ===== */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.prototype.slice.call(document.querySelectorAll(s));
+const LS = {
+  get(k,d){ try{ const v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let toastTimer=null;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.remove('hidden'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.add('hidden'),2200); }
+function norm(s){ return String(s||'').toLowerCase().replace(/[’‘`]/g,"'").replace(/[^a-z0-9'\s]/g,' ').replace(/\s+/g,' ').trim(); }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i];a[i]=a[j];a[j]=t; } return a; }
+
+/* ===== 状态 ===== */
+const DEF_SET = {book:'7a',type:'word',section:'all',speak:true,auto:true,focusSpeak:false,source:'auto',accent:'uk',lang:'en',zh:true,shuffle:false,interval:8,repeat:1,rate:0.95,voice:'',limit:20};
+let SET = Object.assign({},DEF_SET,LS.get('dict_set',{}));
+let SEL = LS.get('dict_sel',{'7a':[],'7b':[],'custom':[]});
+if(!SEL['7a'])SEL['7a']=[]; if(!SEL['7b'])SEL['7b']=[]; if(!SEL['custom'])SEL['custom']=[];
+let ST = { items:[], idx:0, answers:[], paused:false, playing:false, timer:null, tick:null, started:0, range:'' };
+let VOICES=[], AUDIO_SEQ=0, AUDIO_EL=null, AUDIO_CANCEL=null, TTS_CANCEL=null;
+
+/* ===== 数据访问 ===== */
+function customItems(){
+  const c=LS.get('dict_custom',[]);
+  return c.map(x=>({type:x.type,en:x.en,zh:x.zh}));
+}
+function unitsOf(book){
+  if(book==='custom'){
+    const c=customItems();
+    const w=c.filter(x=>x.type==='word');
+    return [{unit:'我的词表',title:'自定义内容',
+      words:w.map(x=>[x.en,x.zh]),
+      phrases:w.filter(x=>/\s/.test(x.en.trim())).map(x=>[x.en,x.zh]),
+      sentences:c.filter(x=>x.type==='sentence').map(x=>[x.en,x.zh])}];
+  }
+  return (BOOKS[book]&&BOOKS[book].units)||[];
+}
+function unitByKey(book,key){ return unitsOf(book).find(u=>u.unit===key); }
+function countOf(u,type,sec){
+  const f=a=>(a||[]).filter(p=>secOK(p,sec)).length;
+  const w=f(u.words), p=f(u.phrases), s=f(u.sentences);
+  return type==='word'?w:type==='phrase'?p:type==='sentence'?s:type==='both'?w+s:w+p+s;
+}
+/* Section 过滤：'all'=全部；A/B=只取该 Section 的新词与句子；
+   第 3 位为空的小学复现词、以及自定义词表（只有 2 位）不受 A/B 限制 */
+function secOK(p,sec){ return !sec || sec==='all' || p[2]===sec || p[2]===undefined; }
+function buildItems(book,keys,type){
+  const sec=SET.section||'all';
+  const out=[];
+  keys.forEach(k=>{
+    const u=unitByKey(book,k); if(!u)return;
+    const label=u.unit+' · '+u.title;
+    if(type==='word'||type==='both') (u.words||[]).forEach(p=>{ if(secOK(p,sec)) out.push({type:'word',en:p[0],zh:p[1],unit:label,sec:p[2]||'',key:book+'|'+k+'|w|'+p[0]}); });
+    if(type==='phrase') (u.phrases||[]).forEach(p=>{ if(secOK(p,sec)) out.push({type:'word',en:p[0],zh:p[1],unit:label,sec:p[2]||'',key:book+'|'+k+'|p|'+p[0]}); });
+    if(type==='sentence'||type==='both') (u.sentences||[]).forEach(p=>{ if(secOK(p,sec)) out.push({type:'sentence',en:p[0],zh:p[1],unit:label,sec:p[2]||'',key:book+'|'+k+'|s|'+p[0]}); });
+  });
+  /* 知识清单勾选项并入同一候选池：与教材题目一起参与随机抽题与题量限制 */
+  extraItems().forEach(x=>out.push(x));
+  if(SET.shuffle || SET.limit>0) shuffle(out);
+  if(SET.limit>0 && out.length>SET.limit) out.length=SET.limit;
+  return out;
+}
+/* 抽题结果缓存：保证「打印听写纸」与「开始听写」拿到完全相同的题目与顺序 */
+let CACHE={sig:'',items:[]};
+function cacheSig(){
+  return [SET.book,SET.type,SET.section,SET.shuffle,SET.limit,(SEL[SET.book]||[]).slice().sort().join(',')].join('|')+'|'+extraSig();
+}
+function currentItems(){
+  const s=cacheSig();
+  if(CACHE.sig!==s){ CACHE={sig:s,items:buildItems(SET.book,SEL[SET.book]||[],SET.type)}; }
+  return CACHE.items.slice();
+}
+
+/* ===== 首页渲染 ===== */
+/* ===== 知识清单专项：独立勾选区域（与 ①②③ 同款 seg + 卡片网格） ===== */
+const EXTRA_UI=Object.assign({unit:'u1',sec:'all',cat:'all'},LS.get('dict_extra_view',{}));
+if(!LS.get('dict_extra_view',null))EXTRA_UI.unit=LS.get('dict_extra_unit','u1');
+if(!EXTRA_UNITS.some(u=>u.id===EXTRA_UI.unit))EXTRA_UI.unit='u1';
+EXTRA_UI.open=EXTRA_UI.open||{};
+function saveExtraView(){ LS.set('dict_extra_view',{unit:EXTRA_UI.unit,sec:EXTRA_UI.sec,cat:EXTRA_UI.cat}); }
+function extraFlat(){
+  const out=[];
+  EXTRA_UNITS.forEach(u=>['A','B'].forEach(sec=>EXTRA_CATS.forEach(c=>{
+    const arr=(((EXTRA_DATA[u.id]||{})[sec]||{})[c[0]]||[]);
+    arr.forEach((it,i)=>out.push({id:u.id+'|'+sec+'|'+c[0]+'|'+i,uid:u.id,sec:sec,cat:c[0],catName:c[1],unitName:u.name,it:it}));
+  })));
+  return out;
+}
+function extraSel(){ return LS.get('dict_extra_sel',{}); }
+function extraSig(){ const s=extraSel(); return Object.keys(s).filter(k=>s[k]).sort().join(','); }
+function extraItems(){
+  const sel=extraSel();
+  return extraFlat().filter(x=>sel[x.id]).map(x=>({
+    type:(x.cat==='jx'?'sentence':'word'), en:x.it[0], zh:x.it[1], tagLabel:x.catName,
+    unit:'知识清单 · '+x.unitName+' · Section '+x.sec+' · '+x.catName,
+    sec:x.sec, key:'extra|'+x.id+'|'+x.it[0]
+  }));
+}
+function extraViewSecs(){ return EXTRA_UI.sec==='all'?['A','B']:[EXTRA_UI.sec]; }
+function extraViewCats(){ return EXTRA_UI.cat==='all'?EXTRA_CATS:EXTRA_CATS.filter(c=>c[0]===EXTRA_UI.cat); }
+function extraViewIds(){
+  const uid=EXTRA_UI.unit, out=[];
+  extraViewSecs().forEach(sec=>extraViewCats().forEach(c=>{
+    const arr=(((EXTRA_DATA[uid]||{})[sec]||{})[c[0]]||[]);
+    arr.forEach((it,i)=>out.push(uid+'|'+sec+'|'+c[0]+'|'+i));
+  }));
+  return out;
+}
+function renderExtra(){
+  const wrap=$('#extraWrap'); if(!wrap)return;
+  const sel=extraSel(), uid=EXTRA_UI.unit;
+  const u=EXTRA_UNITS.find(x=>x.id===uid)||EXTRA_UNITS[0];
+  const total=Object.keys(sel).filter(k=>sel[k]).length;
+  let html='';
+  html+='<div class="seg" style="margin-bottom:10px">'+EXTRA_UNITS.map(x=>
+    '<button type="button" data-tab="'+x.id+'" class="'+(x.id===uid?'on':'')+'">'+esc(x.name)+
+    ' <span style="font-weight:400;font-size:11px;opacity:.75">'+esc(x.title)+'</span></button>').join('')+'</div>';
+  html+='<div class="seg" style="margin-bottom:10px">'+[['all','整单元（A + B）'],['A','Section A'],['B','Section B']].map(x=>
+    '<button type="button" data-sec="'+x[0]+'" class="'+(EXTRA_UI.sec===x[0]?'on':'')+'">'+x[1]+'</button>').join('')+'</div>';
+  html+='<div class="seg" style="margin-bottom:14px"><button type="button" data-cat="all" class="'+(EXTRA_UI.cat==='all'?'on':'')+'">全部五类</button>'+
+    EXTRA_CATS.map(c=>'<button type="button" data-cat="'+c[0]+'" class="'+(EXTRA_UI.cat===c[0]?'on':'')+'">'+esc(c[1])+'</button>').join('')+'</div>';
+  html+='<div class="row" style="margin-bottom:12px">'+
+    '<button type="button" class="btn-sm" data-act="view-all">全选当前</button>'+
+    '<button type="button" class="btn-sm" data-act="view-none">清空当前</button>'+
+    '<button type="button" class="btn-sm" data-act="all-none">清空全部</button>'+
+    '<button type="button" class="btn-sm btn-accent" data-act="drill">▶ 只听写勾选的清单</button>'+
+    '<span class="count-badge" id="extraCount">已勾选 '+total+' 条</span></div>';
+  html+='<div class="grid">';
+  extraViewSecs().forEach(sec=>extraViewCats().forEach(c=>{
+    const arr=(((EXTRA_DATA[uid]||{})[sec]||{})[c[0]]||[]);
+    let picked=0;
+    arr.forEach((it,i)=>{ if(sel[uid+'|'+sec+'|'+c[0]+'|'+i])picked++; });
+    const state=picked===0?'':(picked===arr.length?'on':'part');
+    const k=uid+'|'+sec+'|'+c[0], open=!!EXTRA_UI.open[k];
+    html+='<div class="unit eblk '+state+(open?' open':'')+'" data-k="'+esc(k)+'" data-sec="'+sec+'" data-cat="'+c[0]+'">'+
+      '<div class="box">'+(picked===arr.length?'✓':(picked?'–':''))+'</div>'+
+      '<div class="ebody"><div class="ut">'+esc(c[1])+'<span class="ebadge">'+arr.length+' 条</span></div>'+
+      '<div class="ud">Section '+sec+' · 已选 '+picked+' / '+arr.length+'</div>'+
+      '<div class="ebar"><button type="button" class="btn-sm" data-expand="'+esc(k)+'">'+(open?'收起 ▲':'逐条挑选 ▾')+'</button></div>'+
+      '<div class="eitems">'+arr.map((it,i)=>{
+        const id=uid+'|'+sec+'|'+c[0]+'|'+i, on=!!sel[id];
+        const main=it[2]||it[0], sub=it[2]?('→ 写 '+it[0]):it[1];
+        return '<label class="eitem'+(c[0]==='cx'?' cx':'')+'"><input type="checkbox" data-id="'+esc(id)+'"'+(on?' checked':'')+
+          '><span><span class="en">'+esc(main)+'</span><span class="zh">'+esc(sub)+'</span></span></label>';
+      }).join('')+'</div></div></div>';
+  }));
+  html+='</div>';
+  html+='<div style="font-size:12px;color:var(--muted);margin-top:10px">当前显示：'+esc(u.name+' '+u.title)+' · '+
+    extraViewSecs().join(' / ')+' · 共 '+extraViewIds().length+' 条；点卡片可整类勾选，点「逐条挑选」可逐条挑</div>';
+  wrap.innerHTML=html;
+  const info=$('#selInfo');
+  if(info&&total&&info.textContent.indexOf('清单')<0) info.textContent+=' · 清单勾选 '+total+' 条';
+}
+function bindExtra(){
+  const wrap=$('#extraWrap'); if(!wrap)return;
+  wrap.addEventListener('change',e=>{
+    const t=e.target;
+    if(!t.matches||!t.matches('input[data-id]'))return;
+    const s=extraSel();
+    if(t.checked)s[t.dataset.id]=true; else delete s[t.dataset.id];
+    LS.set('dict_extra_sel',s); CACHE.sig=''; renderHome();
+  });
+  wrap.addEventListener('click',e=>{
+    const tab=e.target.closest('button[data-tab]');
+    if(tab){ EXTRA_UI.unit=tab.dataset.tab; saveExtraView(); renderExtra(); return; }
+    const sb=e.target.closest('button[data-sec]');
+    if(sb){ EXTRA_UI.sec=sb.dataset.sec; saveExtraView(); renderExtra(); return; }
+    const cb=e.target.closest('button[data-cat]');
+    if(cb){ EXTRA_UI.cat=cb.dataset.cat; saveExtraView(); renderExtra(); return; }
+    const ex=e.target.closest('button[data-expand]');
+    if(ex){ const k=ex.dataset.expand; if(EXTRA_UI.open[k])delete EXTRA_UI.open[k]; else EXTRA_UI.open[k]=true; renderExtra(); return; }
+    if(e.target.closest('.eitem'))return;
+    const b=e.target.closest('button[data-act]');
+    if(b){
+      e.preventDefault(); e.stopPropagation();
+      const act=b.dataset.act, s=extraSel();
+      if(act==='drill'){
+        const all=extraItems();
+        if(!all.length){ toast('请先勾选清单内容'); return; }
+        const items=all.slice();
+        if(SET.shuffle||SET.limit>0) shuffle(items);
+        if(SET.limit>0&&items.length>SET.limit) items.length=SET.limit;
+        startQuiz(items,'知识清单专项 · 勾选 '+all.length+' 条 · 本次 '+items.length+' 题');
+        return;
+      }
+      if(act==='all-none'){ LS.set('dict_extra_sel',{}); CACHE.sig=''; renderHome(); return; }
+      const ids=extraViewIds();
+      if(act==='view-all') ids.forEach(id=>{ s[id]=true; });
+      else if(act==='view-none') ids.forEach(id=>{ delete s[id]; });
+      LS.set('dict_extra_sel',s); CACHE.sig=''; renderHome();
+      return;
+    }
+    const card=e.target.closest('.unit[data-k]');
+    if(card){
+      const uid=EXTRA_UI.unit, sec=card.dataset.sec, cat=card.dataset.cat, s=extraSel();
+      const arr=(((EXTRA_DATA[uid]||{})[sec]||{})[cat]||[]);
+      const ids=arr.map((it,i)=>uid+'|'+sec+'|'+cat+'|'+i);
+      const all=ids.every(id=>s[id]);
+      if(all) ids.forEach(id=>{ delete s[id]; }); else ids.forEach(id=>{ s[id]=true; });
+      LS.set('dict_extra_sel',s); CACHE.sig=''; renderHome();
+    }
+  });
+}
+
+
+function syncSettingsUI(){
+  $('#segBook').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===SET.book));
+  $('#segType').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===SET.type));
+  $('#segSection').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===(SET.section||'all')));
+  $('#setSpeak').checked=SET.speak; $('#setAuto').checked=SET.auto; $('#setFocusSpeak').checked=!!SET.focusSpeak;
+  $('#setZh').checked=SET.zh; $('#setShuffle').checked=SET.shuffle;
+  $('#setLang').value=SET.lang; $('#setInterval').value=SET.interval;
+  $('#setRepeat').value=String(SET.repeat); $('#setRate').value=String(SET.rate);
+  $('#setLimit').value=String(SET.limit);
+  $('#setSource').value=SET.source||'auto'; $('#setAccent').value=SET.accent||'uk';
+  renderVoices();
+}
+function renderHome(){
+  const us=unitsOf(SET.book), keys=SEL[SET.book]||[], sec=SET.section||'all';
+  const isCustom=SET.book==='custom';
+  $$('#segSection button').forEach(b=>{ b.disabled=isCustom; b.style.opacity=isCustom?'.45':'1'; });
+  $('#unitGrid').innerHTML = us.length? us.map(u=>{
+    const on=keys.indexOf(u.unit)>=0;
+    const nw=(u.words||[]).filter(p=>secOK(p,sec)).length, np=(u.phrases||[]).filter(p=>secOK(p,sec)).length, ns=(u.sentences||[]).filter(p=>secOK(p,sec)).length;
+    if(isCustom && nw+ns===0) return '<div class="unit" style="cursor:default"><div class="box"></div><div><div class="ut">还没有自定义内容</div><div class="ud">点右上角「自定义词表」添加</div></div></div>';
+    const tag=sec==='all'?'':(sec==='A'?' · Section A':' · Section B');
+    return '<div class="unit '+(on?'on':'')+'" data-k="'+esc(u.unit)+'"><div class="box">'+(on?'✓':'')+'</div><div><div class="ut">'+esc(u.unit+' '+u.title)+'</div><div class="ud">单词 '+nw+' · 词语 '+np+' · 句子 '+ns+tag+'</div></div></div>';
+  }).join('') : '';
+  const n=currentItems().length;
+  $('#selInfo').textContent='已选 '+keys.length+' 个单元 · '+n+' 题'+(sec==='all'?'':' · Section '+sec);
+  $('#homeMsg').textContent = n?'':'请先勾选单元';
+  syncSettingsUI();
+  renderExtra();
+}
+function saveSet(){ LS.set('dict_set',SET); }
+function saveSel(){ LS.set('dict_sel',SEL); }
+
+/* ===== 语音：多级降级发音链路 =====
+   参照「王陆语料库听写练习 v5」的发音模块思路：
+   1) 合成语音优先本地离线英音，排除 Online / Natural / Neural 联网音色；
+      单个音色静默失败（3 秒无 onstart）自动切换下一个可用音色；
+   2) 单词/短语走有道真人词典发音；句子走百度整句 TTS 连贯朗读（有道对长句返回 500），
+      整句失败依次换备用整句音源、本地合成，最后明确报错——绝不拆成逐词；
+   3) 中文单独一条链路（系统中文音色 → 百度中文 TTS），与英文互不拖累；单次失败不关闭后续词条；
+   4) 音源切换、连接超时、失败原因全部显示在顶部状态条，绝不静默。
+*/
+function audioStatus(txt,kind){
+  const el=$('#audioBar'); if(!el)return;
+  el.innerHTML=esc(txt)+(kind==='err'?'<small>点此查看解决办法</small>':'');
+  el.className='audio-bar '+(kind||'');
+}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const BAD_VOICES=new Set(), PREFETCH=new Map();
+let ONLINE_FAIL=0, ONLINE_BLOCK_UNTIL=0;
+const onlineUsable=()=>Date.now()>ONLINE_BLOCK_UNTIL;
+
+function loadVoices(){
+  if(!('speechSynthesis' in window))return;
+  const v=window.speechSynthesis.getVoices()||[];
+  if(v.length){ VOICES=v; renderVoices(); }
+}
+function renderVoices(){
+  const sel=$('#setVoice'); if(!sel)return;
+  const cur=SET.voice||'';
+  const en=VOICES.filter(v=>/^en/i.test(v.lang)), zh=VOICES.filter(v=>/^zh|^cmn/i.test(v.lang)), other=VOICES.filter(v=>!/^en|^zh|^cmn/i.test(v.lang));
+  const opt=v=>'<option value="'+esc(v.voiceURI)+'">'+esc(v.name+' ('+v.lang+')'+(v.localService===false?' · 联网':' · 本地')+')')+'</option>';
+  sel.innerHTML='<option value="">自动选择（推荐）</option>'
+    +(en.length?'<optgroup label="英语音色">'+en.map(opt).join('')+'</optgroup>':'<optgroup label="英语音色（本机未安装）"><option disabled>无可用英语语音</option></optgroup>')
+    +(zh.length?'<optgroup label="中文音色">'+zh.map(opt).join('')+'</optgroup>':'')
+    +(other.length?'<optgroup label="其他">'+other.map(opt).join('')+'</optgroup>':'');
+  sel.value=cur;
+  if(sel.value!==cur) sel.value='';
+}
+function voiceScore(v,lang){
+  const name=v.name||'', l=(v.lang||'').toLowerCase().replace('_','-');
+  const online=/online|natural|neural|enhanced/i.test(name), remote=v.localService===false;
+  let s=0;
+  if(lang==='zh'){ if(l.indexOf('zh')===0||l.indexOf('cmn')===0)s+=100; else s-=500; }
+  else { if(l.indexOf('en-gb')===0)s+=100; else if(l.indexOf('en-us')===0)s+=90; else if(l.indexOf('en')===0)s+=60; else s-=500; }
+  if(!online&&!remote)s+=60;
+  if(remote)s-=30;
+  if(BAD_VOICES.has(name))s-=200;
+  return s;
+}
+function localCandidates(lang){
+  if(SET.voice){
+    const v=VOICES.find(x=>x.voiceURI===SET.voice);
+    const re=lang==='zh'?/^zh|^cmn/i:/^en/i;
+    if(v&&re.test(v.lang))return [v];      // 手动音色必须语言匹配，避免中文音色去读英文
+  }
+  return VOICES.filter(v=>voiceScore(v,lang)>0&&!BAD_VOICES.has(v.name||''))
+    .sort((a,b)=>voiceScore(b,lang)-voiceScore(a,lang)).slice(0,4);
+}
+const youdaoUrl=(t,ty)=>'https://dict.youdao.com/dictvoice?audio='+encodeURIComponent(t)+'&type='+ty;
+function ttsText(t){ return String(t==null?'':t).replace(/\(.*?\)/g,'').replace(/\s+/g,' ').trim(); }
+function spdOf(rate){ return Number(rate)<.9?2:(Number(rate)>1.15?5:3); }
+/* 百度翻译 TTS：能连贯朗读整句（实测短句 1.4s / 中句 3.7s / 长句 5.9s），file:// 页面可播放 */
+const baiduUrl=(t,lan,rate)=>'https://fanyi.baidu.com/gettts?lan='+lan+'&text='+encodeURIComponent(t)+'&spd='+spdOf(rate)+'&source=web';
+const enUrl=(t,rate)=>baiduUrl(t,'en',rate);
+const zhUrl=(t,rate)=>baiduUrl(t,'zh',rate);
+/* 有道词典发音只适合单词/短语；≥3 词或带句末标点的走整句 TTS，避免一个词一个词念 */
+function isSentenceText(t){
+  const s=String(t==null?'':t).trim();
+  return /\s/.test(s)&&(s.split(/\s+/).length>=3||/[.?!]$/.test(s));
+}
+function zhText(t){
+  return String(t==null?'':t)
+    .replace(/\([^)]*\)/g,'')                       // 去掉「(或物)」这类括注
+    .replace(/\b(?:adj|adv|n|v|vt|vi|prep|pron|conj|num|int|model\s*v|aux\s*v)\s*\./gi,'')  // 去掉词性缩写
+    .replace(/[；;]/g,'，').replace(/\s+/g,'').trim();
+}
+function hasLocalEn(){ return VOICES.some(v=>/^en/i.test(v.lang)&&v.localService!==false&&!/online|natural|neural|enhanced/i.test(v.name||'')&&!BAD_VOICES.has(v.name||'')); }
+
+/* 在线音频：new Audio 直连，file:// 页面可用；带 8 秒连接超时与播放超时 */
+function playRemote(url,label,rate,seq){
+  return new Promise(res=>{
+    if(seq!==AUDIO_SEQ){res(null);return;}
+    let settled=false,loadT=null,playT=null,started=false,a;
+    try{ a=new Audio(); }catch(e){ res('error'); return; }
+    AUDIO_EL=a;
+    const finish=r=>{
+      if(settled)return; settled=true;
+      if(loadT)clearTimeout(loadT); if(playT)clearTimeout(playT);
+      a.onplaying=a.onloadedmetadata=a.onended=a.onerror=null;
+      if(r!=='ended'){ try{a.pause();}catch(e){} }
+      if(AUDIO_EL===a)AUDIO_EL=null;
+      if(AUDIO_CANCEL===cancel)AUDIO_CANCEL=null;
+      res(r);
+    };
+    const cancel=()=>finish(null);
+    AUDIO_CANCEL=cancel;
+    a.preload='auto'; a.playbackRate=Math.max(.5,Math.min(2,Number(rate)||1));
+    const arm=()=>{
+      if(playT)clearTimeout(playT);
+      const d=(Number.isFinite(a.duration)&&a.duration>0)?a.duration/a.playbackRate*1000+4000:12000;
+      playT=setTimeout(()=>finish('timeout'),Math.max(8000,Math.min(30000,d)));
+    };
+    a.onplaying=()=>{
+      if(seq!==AUDIO_SEQ){finish(null);return;}
+      started=true; if(loadT){clearTimeout(loadT);loadT=null;}
+      audioStatus('🔊 已出声 · '+label,'ok'); arm();
+    };
+    a.onloadedmetadata=()=>{ if(started)arm(); };
+    a.onended=()=>finish('ended');
+    a.onerror=()=>finish('error');
+    audioStatus('⟳ 正在连接 '+label+' …','warn');
+    loadT=setTimeout(()=>finish('timeout'),8000);
+    try{
+      a.src=url;
+      const p=a.play();
+      if(p&&p.catch)p.catch(e=>finish(e&&e.name==='NotAllowedError'?'blocked':'error'));
+    }catch(e){ finish('error'); }
+  });
+}
+
+/* 浏览器合成：逐个尝试本地音色，onstart 判定真的出声，静默失败自动换下一个 */
+function ttsLocal(text,lang,rate,seq,opts){
+  const o=opts||{}, startMs=o.startMs||3000, max=o.max||4;
+  return new Promise(res=>{
+    if(!('speechSynthesis' in window)){res(false);return;}
+    const cands=localCandidates(lang).slice(0,max);
+    if(!cands.length){ res(false); return; }
+    let settled=false,cleanup=()=>{};
+    const done=v=>{ if(settled)return; settled=true; cleanup(); if(TTS_CANCEL===cancel)TTS_CANCEL=null; res(v); };
+    const cancel=()=>done(null);
+    TTS_CANCEL=cancel;
+    const tryAt=i=>{
+      if(settled)return;
+      if(seq!==AUDIO_SEQ){done(null);return;}
+      if(i>=cands.length){done(false);return;}
+      const v=cands[i];
+      let attemptDone=false,startT=null,endT=null;
+      const u=new SpeechSynthesisUtterance(String(text));
+      u.voice=v; u.lang=v.lang; u.rate=Math.max(.5,Math.min(2,Number(rate)||1));
+      const clear=()=>{ if(startT)clearTimeout(startT); if(endT)clearTimeout(endT); u.onstart=u.onend=u.onerror=null; };
+      cleanup=clear;
+      const fail=()=>{
+        if(attemptDone||settled)return;
+        attemptDone=true; clear(); BAD_VOICES.add(v.name);
+        try{window.speechSynthesis.cancel();}catch(e){}
+        setTimeout(()=>tryAt(i+1),60);
+      };
+      u.onstart=()=>{
+        if(attemptDone||settled)return;
+        if(startT){clearTimeout(startT);startT=null;}
+        audioStatus('🔊 已出声 · 浏览器'+(lang==='zh'?'中文':'英文')+'合成语音','ok');
+        endT=setTimeout(fail,Math.max(12000,Math.min(60000,String(text).length*420/Math.max(.5,rate)+8000)));
+      };
+      u.onend=()=>{ if(attemptDone||settled)return; attemptDone=true; clear(); done(true); };
+      u.onerror=fail;
+      try{window.speechSynthesis.cancel();}catch(e){}
+      setTimeout(()=>{ if(attemptDone||settled)return; try{window.speechSynthesis.speak(u);}catch(e){fail();} },60);
+      startT=setTimeout(fail,startMs);
+    };
+    tryAt(0);
+  });
+}
+
+/* 在线链路：句子 → 百度整句 TTS（连贯）→ 有道整句 → 本地合成兜底；
+   单词/短语 → 有道真人词典发音 → 百度整句。不再自动逐词朗读 */
+async function ttsOnline(text,rate,seq){
+  const t=ttsText(text); if(!t)return true;
+  const types=SET.accent==='us'?[1,2]:[2,1];
+  if(isSentenceText(t)){
+    audioStatus('⟳ 正在准备整句连贯发音（'+t.split(/\s+/).length+' 词）','warn');
+    const b=await playRemote(enUrl(t,rate),'连贯整句发音',1,seq);  // spd 已映射语速，不再二次调速
+    if(b==='ended')return true;
+    if(b===null||seq!==AUDIO_SEQ)return null;
+    audioStatus('⚠ 整句音源连接失败，换备用整句音源…','warn');
+    await sleep(300);
+    for(const ty of types){
+      if(seq!==AUDIO_SEQ)return null;
+      const r=await playRemote(youdaoUrl(t,ty),'有道'+(ty===2?'英音':'美音')+'整句',rate,seq);
+      if(r==='ended')return true;
+      if(r===null||seq!==AUDIO_SEQ)return null;
+    }
+    return false;   // 交给本地合成，绝不拆成一个词一个词念
+  }
+  for(const ty of types){
+    if(seq!==AUDIO_SEQ)return null;
+    const label='有道'+(ty===2?'英音':'美音');
+    const r=await playRemote(youdaoUrl(t,ty),label,rate,seq);
+    if(r==='ended')return true;
+    if(r===null||seq!==AUDIO_SEQ)return null;
+    audioStatus('⚠ '+label+'连接失败，正在换音源…','warn');
+    await sleep(300);
+  }
+  const b=await playRemote(enUrl(t,rate),'在线英文发音',1,seq);
+  return b==='ended'?true:(b===null?null:false);
+}
+
+/* 中文在线链路：百度翻译 TTS（国内可访问，file:// 页面实测可播放）；整句失败按标点分段 */
+async function ttsZhOnline(text,rate,seq){
+  const t=zhText(text); if(!t)return true;
+  const r=await playRemote(zhUrl(t,rate),'在线中文发音',rate,seq);
+  if(r==='ended')return true;
+  if(r===null||seq!==AUDIO_SEQ)return null;
+  const parts=t.split(/[，,、；;。！!？?]+/).filter(Boolean);
+  if(parts.length>1){
+    audioStatus('⚠ 整句中文音频不可用，改为分段播放','warn');
+    await sleep(300);
+    for(const p of parts){
+      if(seq!==AUDIO_SEQ)return null;
+      const x=await playRemote(zhUrl(p,rate),'分段 '+p,rate,seq);
+      if(x==='ended')continue;
+      if(x===null||seq!==AUDIO_SEQ)return null;
+      return false;
+    }
+    return true;
+  }
+  return false;
+}
+/* 中文：系统中文音色优先（离线快），失败自动切在线；失败不再静默吞掉 */
+async function sayZh(text,rate,seq){
+  const src=SET.source;
+  if(src==='online')return onlineUsable()?ttsZhOnline(text,rate,seq):false;
+  const ok=await ttsLocal(String(text),'zh',rate,seq,{startMs:1500,max:2});
+  if(ok===true)return true;
+  if(ok===null||seq!==AUDIO_SEQ)return null;
+  if(src==='local')return false;
+  audioStatus('⟳ 系统中文语音不可用，切换到在线中文发音…','warn');
+  await sleep(250);
+  return onlineUsable()?ttsZhOnline(text,rate,seq):false;
+}
+
+async function say(text,lang,rate,seq){
+  const r=Number(rate)||1;
+  if(lang==='zh')return sayZh(text,r,seq);
+  const src=SET.source;
+  if(src==='local')return ttsLocal(String(text),'en',r,seq);
+  if(src==='online')return onlineUsable()?ttsOnline(String(text),r,seq):false;
+  if(hasLocalEn()){
+    const ok=await ttsLocal(String(text),'en',r,seq);
+    if(ok===true)return true;
+    if(ok===null||seq!==AUDIO_SEQ)return null;
+    audioStatus('⚠ 浏览器英语合成不可用，切换到在线词典发音…','warn');
+    await sleep(300);
+  }else{
+    audioStatus('ℹ 本机未装英语语音包，使用在线词典发音（真人音频，更清晰）','ok');
+  }
+  if(!onlineUsable()){
+    audioStatus('ℹ 在线音源暂不可用，改用浏览器合成语音','warn');
+    return ttsLocal(String(text),'en',r,seq);
+  }
+  const ok=await ttsOnline(String(text),r,seq);
+  if(ok===true)return true;
+  if(ok===null)return null;
+  audioStatus('⚠ 在线发音失败，最后尝试浏览器合成语音…','warn');
+  return ttsLocal(String(text),'en',r,seq);
+}
+
+function stopSpeech(){
+  AUDIO_SEQ++;
+  if(TTS_CANCEL){ const c=TTS_CANCEL; TTS_CANCEL=null; try{c();}catch(e){} }
+  if(AUDIO_CANCEL){ const c=AUDIO_CANCEL; AUDIO_CANCEL=null; try{c();}catch(e){} }
+  else if(AUDIO_EL){ try{AUDIO_EL.pause();}catch(e){} AUDIO_EL=null; }
+  if('speechSynthesis' in window){ try{window.speechSynthesis.cancel();}catch(e){} }
+}
+function prefetch(en,zh){
+  if(SET.source==='local'||!onlineUsable())return;
+  const urls=[];
+  if(SET.lang!=='zh'){
+    const t=ttsText(en);
+    urls.push(isSentenceText(t)?enUrl(t,SET.rate):youdaoUrl(t,SET.accent==='us'?1:2));
+  }
+  if(SET.lang!=='en'&&zh)urls.push(zhUrl(zhText(zh),SET.rate));
+  urls.forEach(u=>{
+    try{
+      if(PREFETCH.has(u))return;
+      const a=new Audio(); a.preload='auto'; a.src=u; PREFETCH.set(u,a);
+      if(PREFETCH.size>40)PREFETCH.delete(PREFETCH.keys().next().value);
+    }catch(e){}
+  });
+}
+function speakOnce(text,lang,cb){
+  stopSpeech();
+  const seq=AUDIO_SEQ;
+  say(String(text||''),lang||'en',Number(SET.rate)||1,seq).then(ok=>{
+    if(ok===null||seq!==AUDIO_SEQ)return;   // 被新播放/停止取消，不再推进
+    if(ok!==true){
+      if(lang==='zh'){
+        audioStatus('✗ 中文发音失败：系统无中文语音包且在线中文不可用（英文发音不受影响）','err');
+      }else{
+        ONLINE_FAIL++;
+        if(ONLINE_FAIL>=3){ ONLINE_BLOCK_UNTIL=Date.now()+60000; ONLINE_FAIL=0; }
+        audioStatus('✗ 未能发出声音：请确认音量、网络，并用 Edge / Chrome 打开本文件','err');
+      }
+    }else{ if(lang!=='zh'){ ONLINE_FAIL=0; ONLINE_BLOCK_UNTIL=0; } }
+    if(cb)cb();
+  });
+}
+function speakItem(it,done){
+  const seq = SET.lang==='both' ? [['en',it.en],['zh',it.zh]] : SET.lang==='zh' ? [['zh',it.zh]] : [['en',it.en]];
+  const rounds=[];
+  for(let r=0;r<Number(SET.repeat);r++) seq.forEach(p=>rounds.push(p));
+  let i=0;
+  (function next(){ if(i>=rounds.length){ if(done)done(); return; } const p=rounds[i++]; speakOnce(p[1],p[0],()=>setTimeout(next,260)); })();
+}
+
+/* ===== 听写流程 ===== */
+function clearTimers(){ clearTimeout(ST.timer); clearInterval(ST.tick); ST.timer=null; ST.tick=null; }
+function show(v){ ['Home','Quiz','Result'].forEach(x=>$('#view'+x).classList.toggle('hidden',x!==v)); window.scrollTo(0,0); }
+function startQuiz(items,range){
+  if(!items.length){ toast('没有可听写的内容，请先勾选单元'); return; }
+  clearTimers(); stopSpeech();
+  ST={ items:items, idx:0, answers:items.map(()=>''), paused:false, playing:false, timer:null, tick:null, started:Date.now(), range:range||'本次听写' };
+  renderQuiz(); show('Quiz');
+  if(SET.speak && SET.auto) playLoop();
+  else { $('#countdown').textContent='手动模式'; setActive(0); }
+}
+function renderQuiz(){
+  const l=$('#quizList');
+  l.innerHTML=ST.items.map((it,i)=>
+    '<div class="qrow" data-i="'+i+'" id="qrow'+i+'">'+
+      '<div class="qnum">'+(i+1)+'</div>'+
+      '<div class="qprompt"><span class="zh'+(SET.zh?'':' zh-off')+'">'+esc(it.zh)+'</span><span class="tag">'+esc(it.tagLabel||(it.type==='word'?'单词':'句子'))+' · '+esc(it.unit)+'</span></div>'+
+      '<input class="qinput" id="qi'+i+'" data-i="'+i+'" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="写英文…">'+
+      '<button class="qplay" data-i="'+i+'" title="单独朗读">🔊</button>'+
+    '</div>').join('');
+  $$('#quizList .qinput').forEach(inp=>{
+    inp.addEventListener('input',e=>{ ST.answers[+e.target.dataset.i]=e.target.value; updateBar(); });
+    inp.addEventListener('focus',e=>{
+      if(!SET.focusSpeak||!ST.items.length)return;
+      if(ST.playing&&!ST.paused)return;           // 连播中不重复插播
+      const i=+e.target.dataset.i; ST.idx=i; setActive(i); speakItem(ST.items[i]);
+    });
+    inp.addEventListener('keydown',e=>{
+      const i=+e.target.dataset.i;
+      if(e.key==='Enter'){ e.preventDefault(); focusRow(Math.min(i+1,ST.items.length-1)); }
+      else if(e.key==='ArrowDown'){ e.preventDefault(); focusRow(Math.min(i+1,ST.items.length-1)); }
+      else if(e.key==='ArrowUp'){ e.preventDefault(); focusRow(Math.max(i-1,0)); }
+    });
+  });
+  $$('#quizList .qplay').forEach(b=>b.addEventListener('click',()=>{ const i=+b.dataset.i; ST.idx=i; setActive(i); speakItem(ST.items[i]); }));
+  $$('#quizList .qrow').forEach(r=>r.addEventListener('click',e=>{ if(e.target.classList.contains('qinput')||e.target.classList.contains('qplay'))return; focusRow(+r.dataset.i); }));
+  applyZhVisibility(); updateBar();
+  $('#quizTitle').textContent=ST.range;
+}
+function focusRow(i){ ST.idx=i; setActive(i); if(ST.playing && !ST.paused) playLoop(); const el=$('#qi'+i); if(el)el.focus(); }
+function setActive(i){
+  $$('#quizList .qrow').forEach(r=>r.classList.toggle('active',+r.dataset.i===i));
+  const row=$('#qrow'+i); if(row) row.scrollIntoView({block:'center',behavior:'smooth'});
+  updateBar();
+}
+function updateBar(){
+  const done=ST.answers.filter(a=>a&&a.trim()).length;
+  $('#quizProgress').textContent='已写 '+done+' / '+ST.items.length+'　·　当前第 '+(ST.idx+1)+' 题';
+  $('#barFill').style.width=(ST.items.length?(done/ST.items.length*100):0)+'%';
+}
+function gapFor(it){ return (it.type==='sentence'? Math.max(SET.interval,Math.round(SET.interval*1.6)) : SET.interval)*1000; }
+function startCountdown(ms){
+  clearInterval(ST.tick);
+  const t0=Date.now();
+  const draw=()=>{ const left=Math.max(0,ms-(Date.now()-t0)); $('#countdown').textContent='下一题 '+(left/1000).toFixed(1)+'s'; };
+  draw(); ST.tick=setInterval(draw,100);
+}
+function playLoop(){
+  clearTimers();
+  if(ST.paused || ST.idx>=ST.items.length){ ST.playing=false; return; }
+  ST.playing=true;
+  const it=ST.items[ST.idx]; setActive(ST.idx);
+  prefetch(it.en,it.zh); if(ST.items[ST.idx+1])prefetch(ST.items[ST.idx+1].en,ST.items[ST.idx+1].zh); // 预取下一题（含中文），连播不卡
+  const gap=gapFor(it), t0=Date.now();
+  speakItem(it,()=>{
+    if(ST.paused)return;
+    const wait=Math.max(700,gap-(Date.now()-t0));
+    startCountdown(wait);
+    ST.timer=setTimeout(()=>{
+      if(ST.paused)return;
+      ST.idx++;
+      if(ST.idx>=ST.items.length){ stopPlay(true); toast('已报完所有题目，写完点「批改」'); return; }
+      playLoop();
+    },wait);
+  });
+}
+function stopPlay(finished){
+  clearTimers(); stopSpeech();
+  ST.playing=false; ST.paused=false;
+  $('#btnPause').textContent='⏸ 暂停';
+  $('#countdown').textContent=finished?'已报完 ✓':'已停止';
+}
+function firstUnanswered(){
+  if(!ST.answers||!ST.answers.length)return ST.idx;
+  const i=ST.answers.findIndex(a=>!a||!a.trim());
+  return i<0?ST.idx:i;
+}
+function pauseToggle(){
+  if(!ST.playing){ if(SET.speak){ ST.paused=false; ST.idx=firstUnanswered(); playLoop(); } else toast('当前为手动模式'); return; }
+  if(ST.paused){ ST.paused=false; $('#btnPause').textContent='⏸ 暂停'; playLoop(); }
+  else { ST.paused=true; clearTimers(); stopSpeech(); $('#btnPause').textContent='▶ 继续'; $('#countdown').textContent='已暂停'; }
+}
+function applyZhVisibility(){ $$('#quizList .zh').forEach(z=>z.style.visibility=SET.zh?'visible':'hidden'); $('#btnToggleZh').textContent=SET.zh?'👁 隐藏中文':'👁 显示中文'; }
+
+/* ===== 批改 ===== */
+function submit(){
+  stopPlay(false);
+  const res=ST.items.map((it,i)=>{
+    const user=ST.answers[i]||'';
+    return Object.assign({},it,{user:user,ok:norm(user)===norm(it.en)});
+  });
+  const right=res.filter(r=>r.ok).length, pct=res.length?Math.round(right/res.length*100):0;
+  const mins=Math.max(1,Math.round((Date.now()-ST.started)/60000));
+  // 错词本
+  const wrong=LS.get('dict_wrong',{});
+  res.filter(r=>!r.ok).forEach(r=>{ wrong[r.key]={en:r.en,zh:r.zh,type:r.type,unit:r.unit,key:r.key,n:(wrong[r.key]?wrong[r.key].n:0)+1}; });
+  res.filter(r=>r.ok).forEach(r=>{ if(wrong[r.key])delete wrong[r.key]; });
+  LS.set('dict_wrong',wrong);
+  // 历史
+  const his=LS.get('dict_history',[]);
+  his.unshift({date:new Date().toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}),range:ST.range,total:res.length,right:right,pct:pct,mins:mins});
+  LS.set('dict_history',his.slice(0,60));
+  renderResult(res,pct,mins); show('Result');
+  ST.lastResult=res;
+}
+function renderResult(res,pct,mins){
+  $('#scoreBig').innerHTML=pct+'<small>%</small>';
+  $('#scoreInfo').textContent='答对 '+res.filter(r=>r.ok).length+' / '+res.length+' 题 · 用时约 '+mins+' 分钟'+(pct===100?' 🎉 全对！':pct>=80?' 不错，继续加油！':' 把错题再听一遍吧');
+  $('#scoreRange').textContent=ST.range;
+  $('#resultList').innerHTML=res.map((r,i)=>
+    '<div class="res-row"><div class="idx">'+(i+1)+'</div>'+
+      '<div class="body"><div class="en">'+(r.ok?'<span style="color:var(--ok)">✓</span> ':'<span style="color:var(--danger)">✗</span> ')+esc(r.en)+' <button class="btn-sm qres-play" data-i="'+i+'" style="margin-left:6px">🔊</button></div>'+
+      (r.ok?'':'<div class="user">你写的：'+(esc(r.user)||'（空）')+'</div>')+
+      '<div class="zh">'+esc(r.zh)+' · '+esc(r.unit)+'</div></div></div>').join('');
+  $$('.qres-play').forEach(b=>b.addEventListener('click',()=>speakItem(res[+b.dataset.i])));
+}
+
+/* ===== 打印 ===== */
+function printSheet(items,title,withAnswer){
+  if(!items.length){ toast('请先勾选单元'); return; }
+  const html='<h1>七年级英语听写纸</h1><div class="meta">'+esc(title)+'　共 '+items.length+' 题　　姓名：____________　日期：____________　得分：________</div><ol>'+
+    items.map(it=>'<li>'+esc(it.zh)+'　<span class="line">&nbsp;</span>'+(withAnswer?'<em>'+esc(it.en)+'</em>':'')+'</li>').join('')+'</ol>';
+  $('#printSheet').innerHTML=html; window.print();
+}
+
+/* ===== 弹窗 ===== */
+function openModal(html){ $('#modalBox').innerHTML='<button class="close" id="mClose">×</button>'+html; $('#modalBg').classList.remove('hidden'); $('#mClose').onclick=closeModal; }
+function closeModal(){ $('#modalBg').classList.add('hidden'); }
+$('#modalBg').addEventListener('click',e=>{ if(e.target.id==='modalBg')closeModal(); });
+
+function showWrong(){
+  const w=LS.get('dict_wrong',{}), arr=Object.values(w);
+  const body=arr.length?'<div style="margin-bottom:12px"><button id="wrongDrill" class="btn-primary">🔁 只听写这些错词（'+arr.length+'）</button> <button id="wrongClear" class="btn-sm">清空错词本</button></div>'+
+    arr.map(x=>'<span class="tag-pill" title="'+esc(x.unit)+'">'+esc(x.en)+' — '+esc(x.zh)+' ×'+x.n+'</span>').join('')
+    :'<p style="color:var(--muted)">错词本是空的，听写后答错的词会自动收进来。答对一次后自动移出。</p>';
+  openModal('<h3>📒 错词本</h3>'+body);
+  if(arr.length){
+    $('#wrongDrill').onclick=()=>{ closeModal(); startQuiz(arr.map(x=>({type:x.type,en:x.en,zh:x.zh,unit:x.unit,key:x.key})),'错词本重练'); };
+    $('#wrongClear').onclick=()=>{ LS.set('dict_wrong',{}); showWrong(); toast('已清空'); };
+  }
+}
+function showHistory(){
+  const h=LS.get('dict_history',[]);
+  openModal('<h3>📈 听写历史（最近 '+h.length+' 次）</h3>'+(h.length?
+    '<table><thead><tr><th>时间</th><th>范围</th><th>题数</th><th>答对</th><th>正确率</th></tr></thead><tbody>'+
+    h.map(x=>'<tr><td>'+esc(x.date)+'</td><td>'+esc(x.range)+'</td><td>'+x.total+'</td><td>'+x.right+'</td><td><b style="color:'+(x.pct>=80?'var(--ok)':'var(--danger)')+'">'+x.pct+'%</b></td></tr>').join('')+'</tbody></table>'
+    :'<p style="color:var(--muted)">还没有记录，先做一次听写吧。</p>')+
+    '<div style="margin-top:14px"><button id="hisClear" class="btn-sm">清空历史</button></div>');
+  $('#hisClear').onclick=()=>{ LS.set('dict_history',[]); showHistory(); };
+}
+function showCustom(){
+  const c=LS.get('dict_custom',[]);
+  const txt=c.map(x=>x.en+'='+x.zh).join('\n');
+  openModal('<h3>✏️ 自定义词表 / 句子</h3>'+
+    '<p style="font-size:13.5px;color:var(--muted);margin-top:0">每行一条，格式 <b>英文=中文</b>。含多个单词或带句末标点的自动归为「句子」，其余为「单词」。可用于替换课本词句、补充自己学校的听写范围。</p>'+
+    '<textarea id="customText" placeholder="bottle=瓶子\nmake friends=交朋友\nWhat is your name?=你叫什么名字？">'+esc(txt)+'</textarea>'+
+    '<div class="row" style="margin-top:12px"><button id="customSave" class="btn-primary">💾 保存</button><button id="customExport" class="btn-sm">⬇ 导出 txt</button><button id="customSample" class="btn-sm">填入示例</button><button id="customClear" class="btn-sm">清空</button><span id="customInfo" class="count-badge">共 '+c.length+' 条</span></div>'+
+    '<div class="note">保存后回到首页，切到「我的词表」册次即可听写。自定义内容只保存在本机浏览器，不会上传。</div>');
+  $('#customSave').onclick=()=>{
+    const lines=$('#customText').value.split(/\r?\n/), out=[];
+    lines.forEach(l=>{
+      l=l.trim(); if(!l||l.charAt(0)==='#')return;
+      const p=l.indexOf('='); if(p<0)return;
+      const en=l.slice(0,p).trim(), zh=l.slice(p+1).trim(); if(!en||!zh)return;
+      const isS=/\s/.test(en)&&(en.split(/\s+/).length>=3||/[.?!]$/.test(en));
+      out.push({type:isS?'sentence':'word',en:en,zh:zh});
+    });
+    LS.set('dict_custom',out); $('#customInfo').textContent='共 '+out.length+' 条';
+    SEL['custom']=out.length?['我的词表']:[]; saveSel();
+    toast('已保存 '+out.length+' 条'); renderHome();
+  };
+  $('#customExport').onclick=()=>{
+    const blob=new Blob([$('#customText').value],{type:'text/plain;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='我的听写词表.txt'; a.click(); URL.revokeObjectURL(a.href);
+  };
+  $('#customSample').onclick=()=>{ $('#customText').value='bottle=瓶子\nmake friends=交朋友\ngood morning=早上好\nWhat is your name?=你叫什么名字？\nI am in Class 1, Grade 7.=我在七年级一班。'; };
+  $('#customClear').onclick=()=>{ $('#customText').value=''; };
+}
+function showHelp(){
+  openModal('<h3>❓ 使用说明</h3>'+
+  '<div style="font-size:14.5px;line-height:1.9">'+
+  '<b>推荐用法：</b>首页选册 → 选「整单元 / Section A / Section B」→ 勾选当天要听写的单元 → 选「只听单词 / 只听句子 / 两者都要」→ 点「开始听写」。页面显示中文提示，语音念英文，孩子把英文写进输入框；写完点「结束并批改」自动核对。<br>'+
+  '<b>按 Section 听写：</b>每个单元的单词、词语和重点句都标了 Section A / B，选 A 或 B 就只报课本那一部分的新词与句型，适合跟着课堂进度一天一报；「整单元」再额外包含教材的「小学复现词」（约 262 词，课本不单列 Section）。切换 Section 后单元卡片题数、抽题结果和打印纸会同步变化；「我的词表」不受 Section 限制。<br>'+
+  '<b>三类听写内容：</b>「只听单词」= 课本词汇表全部条目；「只听词语 / 短语」= 重点词组搭配专项（把词表里的多词短语单独提出，并补充按单元整理的重点搭配，补充部分已与词表去重）；「只听句子」= 各单元重点句；「单词 + 句子」两者合并。三类都按 Section A / B 分组，可配合 Section 筛选只报当天课堂学过的部分；较长的词语会自动按整句连贯朗读。<br>'+
+  '<b>也可以只用耳朵：</b>关掉「屏幕显示中文提示」就是纯听写；点「打印听写纸」可打印中文提示让孩子写在纸上（家长用可勾「附答案」）。<br>'+
+  '<b>题量：</b>默认每次随机抽 20 题，一次听写 15–30 题最合适；点「🎲 换一批」重新抽，把「本次题量」改成「全部题目」即可按课本顺序全听。打印纸与实际播报顺序一致。<br>'+
+  '<b>节奏控制：</b>间隔、重复遍数、语速、音色都可调；听写页可重读、暂停、上/下一题。句子题的间隔会自动延长 1.6 倍。<br>'+
+  '<b>批改容错：</b>自动忽略大小写、首尾空格和标点差异，但拼写必须完全一致。<br>'+
+  '<b>发音（重点）：</b>很多 Windows 中文系统<b>只装了中文语音包、没有英语语音</b>，纯靠浏览器合成会完全没声音。英文走「在线词典发音」（有道真人音频，需联网、音质最好）；<b>中文单独一条链路</b>：优先系统中文音色，读不出自动切「在线中文发音」（百度翻译 TTS）。两条链路各自独立降级，中文失败不会拖累英文，也不会静默吞掉。<br>'+
+  '<b>播报语言：</b>只念英文（默认，最贴近课堂）/ 先英文再中文 / 只念中文。选带中文的模式后，建议先点设置区的「🔊 中文」试听一次。中文发音会先剥掉括注和词性缩写（如 <i>另外的人(或物) adj. 另外的</i> → 「另外的人，另外的」），避免读出一堆字母。<br>'+
+  '<b>发音方式：</b>「自动」= 在线优先 + 本地兜底（推荐）；「词典发音」= 只用在线音频；「合成语音」= 只用浏览器 TTS，可完全离线。设置存在 localStorage，下次打开自动恢复。<br>'+
+  '<b>句子连贯朗读：</b>有道词典发音只适合单词，稍长的句子会直接报错，旧版因此降级成「一个词一个词念」。现在<b>句子改走百度整句 TTS 一次念完</b>（短句约 1.4 秒、长句约 6 秒），逐词播放已彻底移除；整句音源失败时只会依次换备用整句音源、本地合成，最后明确报错，绝不拆词。选「只听句子」「只听词语」或「单词 + 句子」即可听到连贯效果。<br>'+
+  '<b>快捷操作：</b>光标在任意一题按 <b>F2</b> 重听该题；点每行 🔊 单独朗读；连播按空格暂停/继续，恢复时从第一个未答词开始；Enter 跳下一格，边听边打不打断节奏；勾选「光标移到空格即发音」可手动逐题模式。<br>'+
+  '<b>没声音怎么排查：</b>① 用 <b>Edge / Chrome 打开本地 .html 文件</b>，不要在聊天预览面板里听；② 点顶部状态条或「🔊 试听单词」，看诊断结果；③ 确认电脑音量、浏览器未静音、已联网；④ 想完全离线，到「Windows 设置 → 时间和语言 → 语音」安装 English (United States) 语音包，然后选「合成语音」。<br>'+
+  '<b>数据：</b>词汇表依据人教版(2024)七年级上下册各单元词表整理（七上 680 词、七下 575 词，合计 1255 词，已按 Section A / B 分界标注，分界依据教材词表分块编排与逐词 Section 标注资料）；另按单元补充「重点词语 / 短语」专项（自动去重）；重点句依据各单元核心句型、Grammar Focus 与课文读背重点句扩充整理（314 句，Section A 169 句 / Section B 145 句）。若与孩子课本有出入，请用「自定义词表」补充或替换。所有记录保存在本机浏览器。</div>');
+}
+
+/* ===== 事件绑定 ===== */
+$('#segBook').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; SET.book=b.dataset.v; saveSet(); renderHome(); });
+$('#segType').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; SET.type=b.dataset.v; saveSet(); renderHome(); });
+$('#segSection').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||b.disabled)return; SET.section=b.dataset.v; saveSet(); renderHome(); });
+$('#unitGrid').addEventListener('click',e=>{
+  const u=e.target.closest('.unit'); if(!u||!u.dataset.k)return;
+  const k=u.dataset.k, arr=SEL[SET.book], i=arr.indexOf(k);
+  if(i>=0)arr.splice(i,1); else arr.push(k);
+  saveSel(); renderHome();
+});
+$('#btnAll').onclick=()=>{ SEL[SET.book]=unitsOf(SET.book).map(u=>u.unit); saveSel(); renderHome(); };
+$('#btnNone').onclick=()=>{ SEL[SET.book]=[]; saveSel(); renderHome(); };
+function bindSet(id,key,fn){ const el=$(id); el.addEventListener('change',()=>{ SET[key]=fn?fn(el):el.checked; saveSet(); renderHome(); }); }
+bindSet('#setSpeak','speak'); bindSet('#setAuto','auto'); bindSet('#setFocusSpeak','focusSpeak'); bindSet('#setZh','zh'); bindSet('#setShuffle','shuffle');
+bindSet('#setLang','lang',e=>e.value); bindSet('#setInterval','interval',e=>Math.max(2,Math.min(90,Number(e.value)||8)));
+bindSet('#setRepeat','repeat',e=>Number(e.value)); bindSet('#setRate','rate',e=>Number(e.value));
+bindSet('#setLimit','limit',e=>Number(e.value));
+bindSet('#setSource','source',e=>e.value); bindSet('#setAccent','accent',e=>e.value);
+$('#setVoice').addEventListener('change',e=>{ SET.voice=e.target.value; saveSet(); BAD_VOICES.clear(); });
+
+/* 试听诊断：明确告诉用户当前走的是哪一级音源、有没有出声 */
+function runVoiceTest(text,label,lang){
+  const out=$('#tryResult'); if(out)out.textContent='正在测试 '+label+'…';
+  const t0=Date.now();
+  speakOnce(text,lang||'en',()=>{
+    const bar=$('#audioBar'), bad=bar.className.indexOf('err')>=0;
+    const src=bar.textContent.replace('点此查看解决办法','').trim();
+    if(out)out.textContent=bad
+      ? '✗ '+label+'仍未出声，请点顶部红色状态条查看排查步骤'
+      : '✓ '+label+'发音正常 · '+src+' · '+((Date.now()-t0)/1000).toFixed(1)+' 秒';
+  });
+}
+$('#btnTry').onclick=()=>runVoiceTest('bottle','英文单词');
+$('#btnTryS').onclick=()=>runVoiceTest('What is your name?','英文句子');
+$('#btnTryZh').onclick=()=>runVoiceTest('你叫什么名字？','中文','zh');
+$('#audioBar').onclick=()=>{ if($('#audioBar').className.indexOf('err')>=0)showHelp(); else runVoiceTest('bottle','单词'); };
+const secTag=()=>SET.section==='all'?'整单元':'Section '+SET.section;
+const extraTag=()=>{const n=Object.keys(LS.get('dict_extra_sel',{})).filter(k=>LS.get('dict_extra_sel',{})[k]).length; return n?'知识清单 '+n+' 条':'';};
+$('#btnStart').onclick=()=>{
+  const items=currentItems();
+  if(!items.length){ toast('请先勾选单元'); return; }
+  const us=unitsOf(SET.book).filter(u=>(SEL[SET.book]||[]).indexOf(u.unit)>=0).map(u=>u.unit).join('、')||'未选单元';
+  startQuiz(items,(SET.book==='custom'?'我的词表':BOOKS[SET.book].name)+' · '+us+' · '+(SET.book==='custom'?'自定义':secTag())+(extraTag()?' ＋ '+extraTag():''));
+};
+$('#btnPrint').onclick=()=>printSheet(currentItems(),(SET.book==='custom'?'我的词表':BOOKS[SET.book].name)+' · '+secTag()+(extraTag()?' ＋ '+extraTag():''),$('#printAnswer').checked);
+$('#btnReshuffle').onclick=()=>{ CACHE.sig=''; renderHome(); toast('已重新抽题，打印纸同步更新'); };
+$('#btnWrong').onclick=showWrong; $('#btnHistory').onclick=showHistory; $('#btnCustom').onclick=showCustom; $('#btnHelp').onclick=showHelp;
+$('#btnBack').onclick=()=>{ stopPlay(false); show('Home'); renderHome(); };
+$('#btnReplay').onclick=()=>{ if(ST.items.length){ clearTimers(); speakItem(ST.items[ST.idx],()=>{ if(ST.playing&&!ST.paused)playLoop(); }); } };
+$('#btnPrev').onclick=()=>{ if(ST.idx>0){ clearTimers(); ST.idx--; setActive(ST.idx); if(ST.playing&&!ST.paused)playLoop(); } };
+$('#btnNext').onclick=()=>{ if(ST.idx<ST.items.length-1){ clearTimers(); ST.idx++; setActive(ST.idx); if(ST.playing&&!ST.paused)playLoop(); } };
+$('#btnPause').onclick=pauseToggle;
+$('#btnToggleZh').onclick=()=>{ SET.zh=!SET.zh; saveSet(); applyZhVisibility(); };
+$('#btnSubmit').onclick=submit; $('#btnSubmit2').onclick=submit;
+$('#btnRedoWrong').onclick=()=>{
+  const wrong=ST.lastResult?ST.lastResult.filter(r=>!r.ok):[];
+  if(!wrong.length){ toast('全对啦，没有错题 🎉'); return; }
+  startQuiz(wrong.map(r=>({type:r.type,en:r.en,zh:r.zh,unit:r.unit,key:r.key})),'错题重练');
+};
+$('#btnRedoAll').onclick=()=>startQuiz(ST.items.map(x=>Object.assign({},x)),ST.range);
+$('#btnResultHome').onclick=()=>{ show('Home'); renderHome(); };
+$('#btnResultPrint').onclick=()=>{
+  const res=ST.lastResult||[];
+  const html='<h1>七年级英语听写结果</h1><div class="meta">'+esc(ST.range)+'　姓名：____________　日期：____________</div><ol>'+
+    res.map(r=>'<li>'+esc(r.zh)+'　'+(r.ok?'<em>'+esc(r.en)+' ✓</em>':'<em>'+esc(r.en)+' ✗（写成：'+esc(r.user||'空')+'）</em>')+'</li>').join('')+'</ol>';
+  $('#printSheet').innerHTML=html; window.print();
+};
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape' && !$('#modalBg').classList.contains('hidden')){ closeModal(); return; }
+  if($('#viewQuiz').classList.contains('hidden'))return;
+  if(e.key==='F2'){                       // 光标在任意一行按 F2，重听该题
+    e.preventDefault();
+    if(!ST.items.length)return;
+    const i=(e.target&&e.target.dataset&&e.target.dataset.i!==undefined)?+e.target.dataset.i:ST.idx;
+    ST.idx=i; setActive(i); clearTimers();
+    speakItem(ST.items[i],()=>{ if(ST.playing&&!ST.paused)playLoop(); });
+    return;
+  }
+  if(e.target.tagName==='INPUT')return;
+  if(e.key===' '){ e.preventDefault(); pauseToggle(); }
+});
+
+/* ===== 启动 ===== */
+if('speechSynthesis' in window){ loadVoices(); window.speechSynthesis.onvoiceschanged=loadVoices; }
+bindExtra();
+renderHome();
+</script>
+</body>
+</html>
